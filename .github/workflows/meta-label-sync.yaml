@@ -6,7 +6,9 @@ on:
   workflow_dispatch: {}  # Manual Trigger
   push:
     branches: [ "main" ]
-    paths: [ ".github/labels.yaml" ]
+    paths:
+      - ".github/configs/labels.yaml"
+      - ".github/workflows/meta-label-sync.yaml"
   schedule:
     - cron: "0 0 * * *" # Every day at midnight
 
