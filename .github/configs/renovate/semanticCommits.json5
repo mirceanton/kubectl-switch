@@ -33,8 +33,7 @@
       {
         "matchDatasources": ["gomod"],
         "matchUpdateTypes": ["minor", "patch"],
-        "semanticCommitType": "deps",
-        "semanticCommitScope": "go",
+        "commitMessagePrefix": "deps(go): ",
         "commitMessageTopic": "{{depName}}",
         "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
       },
