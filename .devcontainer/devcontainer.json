@@ -1,0 +1,15 @@
+{
+	"name": "kube-switcher",
+
+	"image": "mcr.microsoft.com/devcontainers/go:1.1.14-1.22-bookworm",
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/audacioustux/devcontainers/taskfile:1": {},
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube": {},
+		"ghcr.io/dhoeric/features/k9s:1": {}
+	},
+
+	"remoteUser": "vscode",
+	"containerUser": "vscode",
+	"updateRemoteUserUID": true
+}

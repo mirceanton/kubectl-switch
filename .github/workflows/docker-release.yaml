@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Docker Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      custom-tag:
+        type: string
+        description: Additional custom tags for the image.
+        required: false
+  push:
+    tags: [ "*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  release:
+    uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@main
+    with:
+      platforms: linux/amd64, linux/arm64
+      custom-tag: ${{ inputs.custom-tag }}
+      build-args: |
+        VERSION=${{ inputs.custom-tag || github.ref_name }}
+        REVISION=${{ inputs.custom-tag || github.ref_name }}
+    secrets: inherit

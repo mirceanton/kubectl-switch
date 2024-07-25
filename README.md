@@ -1,73 +1,119 @@
-# kswitcher
+# kube-switcher
 
-The most basic implementation of a `kubeconfig` file manager, written in python.
+`kube-switcher` is a CLI tool for managing and switching Kubernetes contexts. It allows you to interactively or non-interactively switch between different Kubernetes contexts defined in multiple kubeconfig files.
 
-## Prerequisites
+## Features
 
-- Python 3
+- Interactive Context Selection: Use a terminal-based UI to select and switch contexts.
+- Non-Interactive Mode: Switch directly to a specified context by name, suitable for scripting.
+- Config File Management: Handles multiple kubeconfig files and manages context switching seamlessly.
 
 ## Installation
 
-### Convenience Script
+### Prerequisites
 
-Download the installation script to a file, inspect it, and then run it:
+- Go 1.22.5 or higher
+- `kubectl` (for context verification)
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/mirceanton/kswitcher/v1.0.0/scripts/install.sh -o get-kswitcher.sh
-sudo sh ./get-kswitcher.sh
+### Building from Source
+
+- Clone the repository:
+
+```sh
+git clone https://github.com/your-username/kube-switcher.git
+cd kube-switcher
 ```
 
-### Manual Installation
+- Build the binary:
 
-1. Clone the repository:
+```sh
+go build -o kube-switcher
+```
 
-    ```shell
-    git clone https://github.com/mirceanton/kswitcher.git
-    ```
+- (Optional) Move the binary to a directory in your `$PATH`:
 
-2. Change into the cloned directory:
+```sh
+sudo mv kube-switcher /usr/local/bin/
+```
 
-    ```shell
-    cd kswitcher
-    ```
+### Installation via Release
 
-3. Install the dependencies:
-
-    ```shell
-    pip install -r requirements.txt
-    ```
-
-4. Add the python script to `PATH`
-
-    ```shell
-    chmod +x kswitcher.py
-    sudo mv kswitcher.py /usr/local/bin/kswitcher
-    ```
+- Download the latest release from the releases page.
+- Extract the archive and move the binary to a directory in your `$PATH`.
 
 ## Usage
 
-To switch between Kubernetes contexts, follow these steps:
+### Configuration
 
-1. Configure your Kubernetes context files:
+Before using `kube-switcher`, set the `KUBESWITCHER_CONFIG_DIR` environment variable to the directory containing your kubeconfig files:
 
-    - By default, the script assumes the context files are located in `~/.kube/configs` directory. You can specify a different directory by setting the environment variable `KSWITCHER_CONFIGS_DIR` to the desired directory path.
-    - Each context file should be a valid Kubernetes YAML configuration file, containing a single context definition
-    - The script reads the contexts section of each configuration file to determine the available contexts.
+```sh
+export KUBESWITCHER_CONFIG_DIR="/path/to/your/kubeconfig/files"
+```
 
-2. Run the script:
+### Interactive Mode
 
-    ```shell
-    python kswitcher.py [context_name]
-    ```
+To interactively select and switch to a Kubernetes context, run:
 
-    If you provide the `context_name` argument, the script will switch to that context if it exists.
+```sh
+kube-switcher switch
+```
 
-    If no argument is provided, the script will prompt you to choose a context from the available options.
+You will be prompted to choose a context from the list of available contexts.
+
+### Non-Interactive Mode
+
+To switch to a specific context by name without interaction, use the `--context` flag:
+
+```sh
+kube-switcher switch --context <context_name>
+```
+
+Replace <context_name> with the name of the context you want to switch to.
+
+### Examples
+
+#### Interactive Selection:
+
+```sh
+kube-switcher switch
+```
+
+Output:
+
+```sh
+Use the arrow keys to navigate: ↓ ↑ → ←
+? Select Kubernetes Context:
+  ▸ my-cluster
+    another-cluster
+```
+
+#### Non-Interactive Selection:
+
+```sh
+kube-switcher switch --context my-cluster
+```
+
+Output:
+
+```sh
+Switched to context 'my-cluster' from file '/home/user/.kube/configs/my-cluster.yaml'
+```
+
+## Error Handling
+
+- If multiple contexts with the same name are found in different files, kube-switcher will report an error and exit.
+- If the `KUBESWITCHER_CONFIG_DIR` environment variable is not set or is incorrect, kube-switcher will provide an appropriate error message.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+
+- Fork the repository,
+- Create a new branch for your changes,
+- Make your changes and commit them,
+- Submit a pull request describing your changes.
 
 ## License
 
-MIT
-
-## Author Information
-
-A script developed by [Mircea-Pavel ANTON](https://www.mirceanton.com).
+This project is licensed under the MIT License. See the `LICENSE` file for details.
