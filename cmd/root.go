@@ -6,6 +6,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Global flag for the kubeconfig directory
+var configDir string
+
 var rootCmd = &cobra.Command{
 	Use:   "kube-switcher",
 	Short: "A tool to switch Kubernetes contexts",
@@ -21,4 +24,5 @@ func Execute() {
 
 func init() {
 	// Add any global flags here
+	rootCmd.PersistentFlags().StringVarP(&configDir, "config-dir", "c", "", "Directory containing kubeconfig files")
 }

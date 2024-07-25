@@ -13,7 +13,6 @@ import (
 
 // CLI flags
 var (
-	configDir  string
 	contextName string
 )
 
@@ -37,13 +36,17 @@ var switchCmd = &cobra.Command{
 		}
 
 		// If context name is not provided, prompt user to select one
-		if contextName == "" {
+		if len(args) == 0 {
 			contextName, err = prompt.SelectContext(contexts)
 			if err != nil {
 				log.Fatalf("Error selecting context: %v", err)
 			}
-		}
 
+		} else if len(args) == 1 {
+			contextName = args[0]
+		} else {
+			log.Fatalf("Too many arguments!")
+		}
 		log.Debugf("Selected context: %s", contextName)
 
 		// Find and copy the selected kubeconfig file
@@ -63,10 +66,5 @@ var switchCmd = &cobra.Command{
 }
 
 func init() {
-	// Add the switch command to the root command
 	rootCmd.AddCommand(switchCmd)
-
-	// Define flags for the switch command
-	switchCmd.Flags().StringVarP(&configDir, "config-dir", "c", "", "Directory containing kubeconfig files")
-	switchCmd.Flags().StringVarP(&contextName, "context", "x", "", "Name of the context to switch to (non-interactive)")
 }
