@@ -2,11 +2,14 @@
 
 `kube-switcher` is a CLI tool for managing and switching Kubernetes contexts. It allows you to interactively or non-interactively switch between different Kubernetes contexts defined in multiple kubeconfig files.
 
-## Features
+## Why `kube-switcher`?
 
-- Interactive Context Selection: Use a terminal-based UI to select and switch contexts.
-- Non-Interactive Mode: Switch directly to a specified context by name, suitable for scripting.
-- Config File Management: Handles multiple kubeconfig files and manages context switching seamlessly.
+`kube-switcher` is an alternative to tools like `kubectx` and `kubie`. It has been created because I feel both of those fall short in certain regards:
+
+- `kubectx` assumes all your contexts are defined in a single config file. Yes, there is some hackery you can do to your `KUBECONFIG` environment variable to make it work with multiple files, but it is a sub-par workflow in my opinion and I never really liked it
+- `kubie` spawns a new shell when you use it to change contexts, making it practically impossible to integrate into scripts or taskfile automation. Also I consider it to be too complicated of a solution for what is fundamentally a really simple problem
+
+What I wanted was something much simpler conceptually: I just want to dump all my kubeconfig files in a single directory and then, have my tool parse them and "physically" move over the config file to `.kube/config` such that it is also persistent between different shells.
 
 ## Installation
 
@@ -48,7 +51,7 @@ sudo mv kube-switcher /usr/local/bin/
 Before using `kube-switcher`, set the `KUBESWITCHER_CONFIG_DIR` environment variable to the directory containing your kubeconfig files:
 
 ```sh
-export KUBESWITCHER_CONFIG_DIR="/path/to/your/kubeconfig/files"
+export KUBESWITCHER_CONFIG_DIR="~/.kube/configs/"
 ```
 
 ### Interactive Mode
