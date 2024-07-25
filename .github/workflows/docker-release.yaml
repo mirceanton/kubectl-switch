@@ -9,10 +9,16 @@ on:
         type: string
         description: Additional custom tags for the image.
         required: false
-  push:
-    tags: [ "*" ]
   pull_request:
     branches: [ "main" ]
+    paths:
+      - Dockerfile
+      - .github/workflows/docker-release.yaml
+      - '*.go'
+      - 'go.mod'
+      - 'go.sum'
+  push:
+    tags: [ "*" ]
 
 jobs:
   release:

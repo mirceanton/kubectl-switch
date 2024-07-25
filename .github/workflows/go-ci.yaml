@@ -6,6 +6,10 @@ on:
   workflow_dispatch: {}  # Manual Trigger
   pull_request:
     branches: [ "main" ]
+    paths:
+      - '*.go'
+      - 'go.mod'
+      - 'go.sum'
 
 jobs:
   build:
