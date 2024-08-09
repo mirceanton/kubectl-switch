@@ -1,7 +1,7 @@
 {
 	"name": "kube-switcher",
 
-	"image": "mcr.microsoft.com/devcontainers/go:1.1.14-1.22-bookworm",
+	"image": "mcr.microsoft.com/devcontainers/go:1.1.15-1.22-bookworm",
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
 		"ghcr.io/audacioustux/devcontainers/taskfile:1": {},
