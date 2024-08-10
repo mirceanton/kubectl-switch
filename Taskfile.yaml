@@ -18,7 +18,7 @@ tasks:
       - internal/*
       - go.mod
       - go.sum
-    cmd: go build  -ldflags "-s -w -X main.Version=${VERSION} -X main.Gitsha=${REVISION}" -o ${DIR_NAME}
+    cmd: go build -o ${DIR_NAME}
 
   run:
     desc: Run the binary.
