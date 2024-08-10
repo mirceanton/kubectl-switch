@@ -14,6 +14,7 @@ tasks:
     desc: Build the binary.
     sources:
       - main.go
+      - cmd/*
       - internal/*
       - go.mod
       - go.sum
