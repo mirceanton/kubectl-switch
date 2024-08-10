@@ -5,7 +5,7 @@ name: Go Release
 on:
   workflow_dispatch: {}
   push:
-    tags: [ "*" ]
+    tags: ["*"]
 
 jobs:
   release:

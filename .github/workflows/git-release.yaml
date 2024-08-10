@@ -5,13 +5,13 @@ name: Git Release
 on:
   workflow_dispatch: {}
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     paths-ignore:
-      - '.devcontainer/**'
-      - '.github/**'
-      - '.vscode/**'
-      - '.gitignore'
-      - 'README.md'
+      - ".devcontainer/**"
+      - ".github/**"
+      - ".vscode/**"
+      - ".gitignore"
+      - "README.md"
 
 jobs:
   release:

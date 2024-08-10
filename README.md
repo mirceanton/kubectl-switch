@@ -76,7 +76,7 @@ Replace <context_name> with the name of the context you want to switch to.
 
 ### Examples
 
-#### Interactive Selection:
+#### Interactive Selection
 
 ```sh
 kube-switcher switch
@@ -91,7 +91,7 @@ Use the arrow keys to navigate: ↓ ↑ → ←
     another-cluster
 ```
 
-#### Non-Interactive Selection:
+#### Non-Interactive Selection
 
 ```sh
 kube-switcher switch --context my-cluster

@@ -3,13 +3,12 @@
 name: Labeler
 
 on:
-  workflow_dispatch: {}  # Manual Trigger
-  pull_request_target:
-    branches: [ "main" ]
+  workflow_dispatch: {} # Manual Trigger
+  pull_request_target: {}
 
 jobs:
   labeler:
     uses: mirceanton/reusable-workflows/.github/workflows/meta-labeler.yaml@main
+    secrets: inherit
     with:
       config-file: .github/configs/labeler.yaml
-    secrets: inherit

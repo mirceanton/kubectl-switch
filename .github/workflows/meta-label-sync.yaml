@@ -3,9 +3,9 @@
 name: Label Sync
 
 on:
-  workflow_dispatch: {}  # Manual Trigger
+  workflow_dispatch: {} # Manual Trigger
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     paths:
       - ".github/configs/labels.yaml"
       - ".github/workflows/meta-label-sync.yaml"
@@ -18,6 +18,6 @@ permissions:
 jobs:
   label-sync:
     uses: mirceanton/reusable-workflows/.github/workflows/meta-label-sync.yaml@main
+    secrets: inherit
     with:
       config-file: .github/configs/labels.yaml
-    secrets: inherit

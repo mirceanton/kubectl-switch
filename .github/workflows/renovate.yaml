@@ -14,7 +14,7 @@ on:
         default: debug
         required: false
   schedule:
-    - cron: "0 * * * *"  # hourly
+    - cron: "0 * * * *" # hourly
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -23,7 +23,7 @@ concurrency:
 jobs:
   renovate:
     uses: mirceanton/reusable-workflows/.github/workflows/renovate.yaml@main
+    secrets: inherit
     with:
       dryRun: "${{ inputs.dryRun == true }}"
       logLevel: "${{ inputs.logLevel || 'debug' }}"
-    secrets: inherit

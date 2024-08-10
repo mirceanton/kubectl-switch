@@ -3,13 +3,12 @@
 name: Golang CI
 
 on:
-  workflow_dispatch: {}  # Manual Trigger
+  workflow_dispatch: {} # Manual Trigger
   pull_request:
-    branches: [ "main" ]
     paths:
-      - '*.go'
-      - 'go.mod'
-      - 'go.sum'
+      - "*.go"
+      - "go.mod"
+      - "go.sum"
 
 jobs:
   release:
