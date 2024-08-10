@@ -1,0 +1,36 @@
+---
+version: "3"
+
+env:
+  VERSION:
+    sh: git describe --tags --always --dirty
+  REVISION:
+    sh: git rev-parse --short HEAD
+  DIR_NAME:
+    sh: basename $(git rev-parse --show-toplevel)
+
+tasks:
+  build:
+    desc: Build the binary.
+    sources:
+      - main.go
+      - internal/*
+      - go.mod
+      - go.sum
+    cmd: go build  -ldflags "-s -w -X main.Version=${VERSION} -X main.Gitsha=${REVISION}" -o ${DIR_NAME}
+
+  run:
+    desc: Run the binary.
+    deps: [build]
+    cmd: ./${DIR_NAME} {{.CLI_ARGS}}
+  test:
+    desc: Run tests.
+    cmd: go test -v ./... -race -covermode=atomic
+
+  lint:
+    desc: Run linter.
+    cmd: golangci-lint run
+
+  docker-build:
+    desc: Build the docker image.
+    cmd: docker build . -t ${DIR_NAME}:${VERSION}
