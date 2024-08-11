@@ -12,9 +12,10 @@ import (
 
 // contextCmd represents the switch command to change Kubernetes contexts.
 var contextCmd = &cobra.Command{
-	Use:   "context",
-	Short: "Switch the active Kubernetes context",
-	Args:  cobra.MaximumNArgs(1), // Accept at most one argument (the context name)
+	Use:     "context",
+	Aliases: []string{"ctx"}, // Add this line to define the alias
+	Short:   "Switch the active Kubernetes context",
+	Args:    cobra.MaximumNArgs(1), // Accept at most one argument (the context name)
 	Run: func(cmd *cobra.Command, args []string) {
 		// Determine the kubeconfig directory
 		if configDir == "" {
