@@ -1,0 +1,20 @@
+---
+project_name: kube-switcher
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X github.com/mirceanton/kube-switcher/cmd.version={{.Version}}
+
+archives:
+  - name_template: "{{.ProjectName}}_{{.Os}}_{{.Arch}}"
+
+checksum:
+  name_template: "checksums.txt"
