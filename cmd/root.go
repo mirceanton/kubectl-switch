@@ -12,7 +12,7 @@ var configDir string
 var rootCmd = &cobra.Command{
 	Use:   "kube-switcher",
 	Short: "A tool to switch Kubernetes contexts",
-	Long:  `Kubectl-switcher is a CLI tool to switch Kubernetes contexts from multiple kubeconfig files.`,
+	Long:  `kube-switcher is a CLI tool to switch Kubernetes contexts from multiple kubeconfig files.`,
 }
 
 func Execute() {
@@ -24,5 +24,5 @@ func Execute() {
 
 func init() {
 	// Add any global flags here
-	rootCmd.PersistentFlags().StringVarP(&configDir, "config-dir", "c", "", "Directory containing kubeconfig files")
+	rootCmd.PersistentFlags().StringVarP(&configDir, "kubeconfig-dir", "", "", "Directory containing kubeconfig files")
 }
