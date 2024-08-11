@@ -15,9 +15,10 @@ import (
 
 // namespaceCmd represents the command to change Kubernetes namespaces.
 var namespaceCmd = &cobra.Command{
-	Use:   "namespace",
-	Short: "Switch the active Kubernetes namespace",
-	Args:  cobra.MaximumNArgs(1), // Accept at most one argument (the namespace name)
+	Use:     "namespace",
+	Aliases: []string{"ns"}, // Add this line to define the alias
+	Short:   "Switch the active Kubernetes namespace",
+	Args:    cobra.MaximumNArgs(1), // Accept at most one argument (the namespace name)
 	Run: func(cmd *cobra.Command, args []string) {
 		// Determine the location of the kubeconfig file
 		kubeconfigPath := os.Getenv("KUBECONFIG")
