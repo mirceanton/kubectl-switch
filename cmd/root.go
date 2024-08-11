@@ -7,11 +7,13 @@ import (
 )
 
 var configDir string // Global flag for the kubeconfig directory
+var version string   // The version of the tool, set at build time
 
 var rootCmd = &cobra.Command{
-	Use:   "kube-switcher",
-	Short: "A tool to switch Kubernetes contexts",
-	Long:  `kube-switcher is a CLI tool to switch Kubernetes contexts from multiple kubeconfig files.`,
+	Use:     "kube-switcher",
+	Short:   "A tool to switch Kubernetes contexts",
+	Long:    `kube-switcher is a CLI tool to switch Kubernetes contexts from multiple kubeconfig files.`,
+	Version: version,
 }
 
 func Execute() {
