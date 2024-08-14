@@ -1,7 +1,7 @@
 # =================================================================================================
 # BUILDER STAGE
 # =================================================================================================
-FROM golang:1.22.6-alpine@sha256:1a478681b671001b7f029f94b5016aed984a23ad99c707f6a0ab6563860ae2f3 AS builder
+FROM golang:1.23.0-alpine@sha256:ac8b5667d9e4b3800c905ccd11b27a0f7dcb2b40b6ad0aca269eab225ed5584e AS builder
 
 ARG PKG=github.com/mirceanton/kube-switcher
 ARG VERSION=dev
