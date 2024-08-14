@@ -6,12 +6,11 @@ on:
   workflow_dispatch: {}
   push:
     branches: ["main"]
-    paths-ignore:
-      - ".devcontainer/**"
-      - ".github/**"
-      - ".vscode/**"
-      - ".gitignore"
-      - "README.md"
+    paths:
+      - "cmd/**"
+      - "go.mod"
+      - "go.sum"
+      - "main.go"
 
 jobs:
   release:
