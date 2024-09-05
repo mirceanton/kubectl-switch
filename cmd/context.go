@@ -110,7 +110,7 @@ var contextCmd = &cobra.Command{
 
 		// Ensure the destination directory exists
 		destDir := filepath.Dir(destPath)
-		err = os.MkdirAll(destDir, 0755)
+		err = os.MkdirAll(destDir, 0o755)
 		if err != nil {
 			log.Fatalf("Failed to create directory %s: %v", destDir, err)
 		}

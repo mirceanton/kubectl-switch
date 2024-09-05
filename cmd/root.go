@@ -6,8 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var configDir string // Global flag for the kubeconfig directory
-var version string   // The version of the tool, set at build time
+var (
+	configDir string // Global flag for the kubeconfig directory
+	version   string // The version of the tool, set at build time
+)
 
 var rootCmd = &cobra.Command{
 	Use:     "kube-switcher",
