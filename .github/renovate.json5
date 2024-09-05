@@ -8,7 +8,6 @@
     "docker:enableMajor",
     ":disableRateLimiting",
     ":semanticCommits",
-    "github>mirceanton/centralized-workflows//.github/configs/renovate/devcontainerNoDigest.json5",
     "github>mirceanton/kube-switcher//.github/configs/renovate/autoMerge.json5",
     "github>mirceanton/kube-switcher//.github/configs/renovate/semanticCommits.json5",
     "github>mirceanton/kube-switcher//.github/configs/renovate/labels.json5"
