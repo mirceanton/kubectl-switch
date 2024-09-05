@@ -1,35 +1,15 @@
 ---
 version: "3"
 
-env:
-  VERSION:
-    sh: git describe --tags --always --dirty
-  DIR_NAME:
-    sh: basename $(git rev-parse --show-toplevel)
-
 tasks:
   build:
-    desc: Build the binary.
-    sources:
-      - main.go
-      - cmd/*
-      - internal/*
-      - go.mod
-      - go.sum
-    cmd: go build -ldflags "-s -w -X github.com/mirceanton/kube-switcher/cmd.version=${VERSION}" -o ${DIR_NAME}
+    desc: Run goreleaser in snapshot mode.
+    cmd: goreleaser release --snapshot --clean
 
-  run:
-    desc: Run the binary.
-    deps: [build]
-    cmd: ./${DIR_NAME} {{.CLI_ARGS}}
   test:
     desc: Run tests.
     cmd: go test -v ./... -race -covermode=atomic
 
   lint:
     desc: Run linter.
-    cmd: golangci-lint run
-
-  docker-build:
-    desc: Build the docker image.
-    cmd: docker build . -t ${DIR_NAME}:${VERSION}
+    cmd: golangci-lint run --fix
