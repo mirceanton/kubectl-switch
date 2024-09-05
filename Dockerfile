@@ -1,22 +1,4 @@
-# =================================================================================================
-# BUILDER STAGE
-# =================================================================================================
-FROM golang:1.23.0-alpine@sha256:d0b31558e6b3e4cc59f6011d79905835108c919143ebecc58f35965bf79948f4 AS builder
-
-ARG PKG=github.com/mirceanton/kube-switcher
-ARG VERSION=dev
-
-WORKDIR /build
-COPY . .
-
-RUN go build -ldflags "-s -w -X github.com/mirceanton/kube-switcher/cmd.version=${VERSION}" -o kube-switcher
-
-
-# =================================================================================================
-# PRODUCTION STAGE
-# =================================================================================================
-FROM scratch
+FROM alpine:3.20.2@sha256:0a4eaa0eecf5f8c050e5bba433f58c052be7587ee8af3e8b3910ef9ab5fbe9f5
 USER 8675:8675
-COPY --from=builder --chmod=555 /build/kube-switcher /kube-switcher
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY kube-switcher /
 ENTRYPOINT ["/kube-switcher"]

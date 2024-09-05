@@ -1,20 +1,89 @@
 ---
+version: 2
 project_name: kube-switcher
+
+before:
+  hooks:
+    - go mod tidy
 
 builds:
   - env:
       - CGO_ENABLED=0
+    binary: "{{.ProjectName}}"
     goos:
       - linux
       - darwin
-    goarch:
-      - amd64
-      - arm64
     ldflags:
-      - -s -w -X github.com/mirceanton/kube-switcher/cmd.version={{.Version}}
+      - -s -w -X github.com/mirceanton/{{.ProjectName}}/cmd.version={{.Version}}
 
 archives:
-  - name_template: "{{.ProjectName}}_{{.Os}}_{{.Arch}}"
+  - format: tar.gz
+    name_template: "{{.ProjectName}}_{{.Os}}_{{.Arch}}"
 
 checksum:
+  disable: false
   name_template: "checksums.txt"
+
+changelog:
+  disable: false
+  use: github
+  sort: asc
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: "Bug fixes"
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: "CI"
+      regexp: ".*ci.*"
+      order: 998
+    - title: Others
+      order: 999
+
+nfpms:
+  - homepage: https://github.com/mirceanton/{{.ProjectName}}
+    maintainer: Mircea-Pavel Anton <contact@mirceanton.com>
+    description: A simple tool to switch between Kubernetes contexts.
+    file_name_template: "{{.ProjectName}}_{{.Os}}_{{.Arch}}"
+    license: MIT
+    formats: [deb, apk, rpm]
+
+dockers:
+  - image_templates:
+      - "ghcr.io/mirceanton/{{.ProjectName}}:{{.Version}}-amd64"
+    use: buildx
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.url=https://github.com/mirceanton/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/mirceanton/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.licenses=MIT"
+      - "--label=org.opencontainers.image.authors=Mircea-Pavel Anton <contact@mirceanton.com>"
+      - "--label=org.opencontainers.image.description=A simple tool to switch between Kubernetes contexts."
+  - image_templates:
+      - "ghcr.io/mirceanton/{{.ProjectName}}:{{.Version}}-arm64v8"
+    use: buildx
+    goarch: arm64
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - "--platform=linux/arm64/v8"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.url=https://github.com/mirceanton/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/mirceanton/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.licenses=MIT"
+      - "--label=org.opencontainers.image.authors=Mircea-Pavel Anton <contact@mirceanton.com>"
+      - "--label=org.opencontainers.image.description=A simple tool to switch between Kubernetes contexts."
+
+docker_manifests:
+  - name_template: "ghcr.io/mirceanton/{{.ProjectName}}:{{.Version}}"
+    image_templates:
+      - "ghcr.io/mirceanton/{{.ProjectName}}:{{.Version}}-amd64"
+      - "ghcr.io/mirceanton/{{.ProjectName}}:{{.Version}}-arm64v8"

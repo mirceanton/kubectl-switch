@@ -1,0 +1,55 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Goreleaser
+
+on:
+  workflow_dispatch: {}
+  push:
+    tags: ["*"]
+  pull_request:
+    paths:
+      - ".github/workflows/goreleaser.yaml"
+      - ".goreleaser.yaml"
+      - "go.mod"
+      - "go.sum"
+      - "cmd/**"
+
+env:
+  DRY_RUN: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' }}
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@3378cda945da322a8db4b193e19d46352ebe2de5 # v1.10.4
+        id: app-token
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          token: "${{ steps.app-token.outputs.token }}"
+
+      - name: Set up Go
+        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
+        with:
+          go-version: "1.22.x"
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_RW_TOKEN }}
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@286f3b13b1b49da4ac219696163fb8c1c93e1200 # v6.0.0
+        with:
+          distribution: goreleaser
+          version: "~> v2"
+          args: release --clean ${{ env.DRY_RUN == 'true' && '--snapshot' || '' }}
+        env:
+          GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
