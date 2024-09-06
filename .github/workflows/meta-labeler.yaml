@@ -7,7 +7,7 @@ on:
 
 jobs:
   pr-labeler:
-    uses: mirceanton/reusable-workflows/.github/workflows/go-release.yaml@update_workflows
+    uses: mirceanton/reusable-workflows/.github/workflows/go-release.yaml@feb4ca98d9ff067e985e6e6ec1916b935d22dfeb
     secrets: inherit
     with:
       config-file: ".github/configs/labeler.yaml"
