@@ -13,6 +13,11 @@ on:
         description: Log Level
         default: debug
         required: false
+  pull_request:
+    paths:
+      - ".github/workflows/renovate.yaml"
+      - ".github/configs/renovate/*.json5"
+      - "renovate.json5"
   schedule:
     - cron: "0 * * * *" # hourly
 
@@ -25,5 +30,5 @@ jobs:
     uses: mirceanton/reusable-workflows/.github/workflows/renovate.yaml@update_workflows
     secrets: inherit
     with:
-      dry-run: "${{ inputs.dry-run == true }}"
+      dry-run: "${{ inputs.dry-run == true || github.event_name == 'pull_request' }}"
       log-level: "${{ inputs.log-level || 'debug' }}"
