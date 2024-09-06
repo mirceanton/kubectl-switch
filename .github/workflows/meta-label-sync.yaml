@@ -10,48 +10,25 @@ on:
         default: true
         required: false
         type: boolean
+
   pull_request:
     paths:
       - ".github/configs/labels.yaml"
       - ".github/workflows/meta-label-sync.yaml"
+
   push:
     branches: ["main"]
     paths:
       - ".github/configs/labels.yaml"
       - ".github/workflows/meta-label-sync.yaml"
+
   schedule:
     - cron: "0 0 * * *" # Every day at midnight
 
-permissions:
-  issues: write
-
-env:
-  CONFIG_PATH: ".github/configs/labels.yaml"
-  DELETE_OTHER_LABELS: true
-  DRY_RUN: ${{ github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry-run == 'true') }}
-
 jobs:
   label-sync:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Generate Token
-        uses: actions/create-github-app-token@3378cda945da322a8db4b193e19d46352ebe2de5 # v1.10.4
-        id: app-token
-        with:
-          app-id: "${{ secrets.BOT_APP_ID }}"
-          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
-
-      - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-        with:
-          token: "${{ steps.app-token.outputs.token }}"
-          sparse-checkout: "${{ env.CONFIG_PATH }}"
-
-      - name: Sync Labels
-        uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a # v2.3.3
-        with:
-          token: "${{ steps.app-token.outputs.token }}"
-          config-file: "${{ env.CONFIG_PATH }}"
-          delete-other-labels: "${{ env.DELETE_OTHER_LABELS }}"
-          dry-run: "${{ env.DRY_RUN }}"
+    uses: mirceanton/reusable-workflows/.github/workflows/meta-label-sync.yaml@feb4ca98d9ff067e985e6e6ec1916b935d22dfeb
+    secrets: inherit
+    with:
+      dry-run: ${{ github.event.inputs.dry-run || github.event_name == 'pull_request' }}
+      config-file: ".github/configs/labels.yaml"
