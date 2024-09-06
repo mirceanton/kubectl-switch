@@ -18,12 +18,8 @@ on:
 
 jobs:
   goreleaser:
-    uses: mirceanton/reusable-workflows/.github/workflows/go-release.yaml@f59a3b8827b366707c1b6204e7f7613104e0d3d3
-    secrets: inherit
+    uses: mirceanton/reusable-workflows/.github/workflows/go-release.yaml@update_workflows
     with:
       go-version: "1.22.5"
       goreleaser-version: "v2.2.0"
       dry-run: ${{ github.event.inputs.dry-run || github.event_name == 'pull_request' }}
-      registry-url: "ghcr.io"
-      registry-username: ${{ github.actor }}
-      registry-password: ${{ secrets.GHCR_RW_TOKEN }}

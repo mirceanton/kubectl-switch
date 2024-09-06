@@ -15,7 +15,7 @@ on:
 
 jobs:
   golangci-lint:
-    uses: mirceanton/reusable-workflows/.github/workflows/go-lint.yaml@f59a3b8827b366707c1b6204e7f7613104e0d3d3
+    uses: mirceanton/reusable-workflows/.github/workflows/go-lint.yaml@update_workflows
     secrets: inherit
     with:
       go-version: "1.22.5"

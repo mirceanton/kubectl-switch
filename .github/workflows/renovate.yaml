@@ -22,8 +22,8 @@ concurrency:
 
 jobs:
   renovate:
-    uses: mirceanton/reusable-workflows/.github/workflows/renovate.yaml@f59a3b8827b366707c1b6204e7f7613104e0d3d3
+    uses: mirceanton/reusable-workflows/.github/workflows/renovate.yaml@update_workflows
     secrets: inherit
     with:
-      dryRun: "${{ inputs.dry-run == true }}"
-      logLevel: "${{ inputs.log-level || 'debug' }}"
+      dry-run: "${{ inputs.dry-run == true }}"
+      log-level: "${{ inputs.log-level || 'debug' }}"
