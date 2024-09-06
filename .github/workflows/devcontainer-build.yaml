@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: DevContainer Docker Build
+
+on:
+  workflow_dispatch: {}
+
+  pull_request:
+    paths:
+      - ".github/workflows/devcontainer-build.yaml"
+      - ".devcontainer/Dockerfile"
+
+jobs:
+  release:
+    uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@feb7161818c3ae82cd4ea25c606c1feefa19643d
+    secrets: inherit
+    with:
+      image: "ghcr.io/mirceanton/devcontainer" # doesn't matter, it's a dry-run
+      platforms: linux/amd64
+      tags: test
+      context: ./.devcontainer
+      dockerfile: ./.devcontainer/Dockerfile
+      dry-run: true
