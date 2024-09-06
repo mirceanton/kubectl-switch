@@ -29,7 +29,7 @@ on:
 
 jobs:
   release:
-    uses: mirceanton/reusable-workflows/.github/workflows/git-release-semver.yaml@7d23d5b64c0a3cdd65d931e59afc884d3d1da8fc
+    uses: mirceanton/reusable-workflows/.github/workflows/git-release-semver.yaml@f59a3b8827b366707c1b6204e7f7613104e0d3d3
     secrets: inherit
     with:
       dry-run: ${{ github.event.inputs.dry-run || github.event.name == 'pull_request' }}
