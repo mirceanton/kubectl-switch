@@ -18,7 +18,7 @@ on:
 
 jobs:
   goreleaser:
-    uses: mirceanton/reusable-workflows/.github/workflows/go-release.yaml@feb7161818c3ae82cd4ea25c606c1feefa19643d
+    uses: mirceanton/reusable-workflows/.github/workflows/go-release.yaml@17d8ef4df857d93b905170956fbbcd56b296e8bb
     secrets: inherit
     with:
       go-version: "1.22.5"
