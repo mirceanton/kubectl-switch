@@ -15,7 +15,7 @@ jobs:
     uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@17d8ef4df857d93b905170956fbbcd56b296e8bb
     secrets: inherit
     with:
-      image: "ghcr.io/mirceanton/devcontainer" # doesn't matter, it's a dry-run
+      image: "ghcr.io/${{ github.repository }}-devcontainer"
       platforms: linux/amd64
       tags: test
       context: ./.devcontainer
