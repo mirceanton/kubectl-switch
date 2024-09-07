@@ -25,18 +25,17 @@ FROM goreleaser/goreleaser:${GORELEASER_VERSION} AS goreleaser
 ## ================================================================================================
 FROM mcr.microsoft.com/devcontainers/go:1.23-bookworm@sha256:a3403234ec01e5383f63414aabfd3e2703a4c1e44b260354495c6f1e8cdc7594 AS workspace
 
-COPY --from=k9s /bin/k9s /usr/local/bin/k9s
-
+# Install additional tools
 COPY --from=kubectl /opt/bitnami/kubectl/bin/kubectl /usr/local/bin/kubectl
-RUN kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl.bash > /dev/null
-
-COPY --from=golangci-lint /usr/bin/golangci-lint /usr/local/bin/golangci-lint
-RUN golangci-lint completion bash | sudo tee /etc/bash_completion.d/golangci-lint.bash > /dev/null
-
-COPY --from=goreleaser /usr/bin/goreleaser /usr/local/bin/goreleaser
-RUN goreleaser completion bash | sudo tee /etc/bash_completion.d/goreleaser.bash > /dev/null
-
+COPY --from=k9s /bin/k9s /usr/local/bin/k9s
 COPY --from=taskfile /task /usr/local/bin/task
+COPY --from=golangci-lint /usr/bin/golangci-lint /usr/local/bin/golangci-lint
+COPY --from=goreleaser /usr/bin/goreleaser /usr/local/bin/goreleaser
+
+# Generate bash completions
+RUN kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl.bash > /dev/null
+RUN golangci-lint completion bash | sudo tee /etc/bash_completion.d/golangci-lint.bash > /dev/null
+RUN goreleaser completion bash | sudo tee /etc/bash_completion.d/goreleaser.bash > /dev/null
 
 USER vscode
 ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
