@@ -3,7 +3,13 @@
 name: Go Release
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Dry Run"
+        default: false
+        required: false
+        type: boolean
 
   push:
     tags: ["*"]
@@ -23,4 +29,4 @@ jobs:
     with:
       go-version: "1.22.5"
       goreleaser-version: "v2.2.0"
-      dry-run: ${{ github.event.inputs.dry-run || github.event_name == 'pull_request' }}
+      dry-run: ${{ inputs.dry-run || github.event_name == 'pull_request' }}
