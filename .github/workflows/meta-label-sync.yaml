@@ -27,7 +27,7 @@ on:
 
 jobs:
   label-sync:
-    uses: mirceanton/reusable-workflows/.github/workflows/meta-label-sync.yaml@17d8ef4df857d93b905170956fbbcd56b296e8bb
+    uses: mirceanton/reusable-workflows/.github/workflows/meta-label-sync.yaml@ad68966d90780c09542180ea2f598d0befc6990f
     secrets: inherit
     with:
       dry-run: ${{ inputs.dry-run || github.event_name == 'pull_request' }}
