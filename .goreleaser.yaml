@@ -34,7 +34,7 @@ changelog:
     - title: Features
       regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
       order: 0
-    - title: "Bug fixes"
+    - title: "Patches"
       regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
       order: 1
     - title: "CI"
