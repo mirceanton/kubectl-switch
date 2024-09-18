@@ -27,23 +27,36 @@ jobs:
       - name: Build `kube-switcher`
         run: go build -o kube-switcher
 
-      - name: Install `kind`
-        run: go install sigs.k8s.io/kind@v0.24.0
+      - name: Install `minikube`
+        run: |
+          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
 
       - name: Set Up Kubernetes Clusters
         run: |
-          kind create cluster --name=test-cluster-1 --kubeconfig=./configs/cluster1.yaml &
-          kind create cluster --name=test-cluster-2 --kubeconfig=./configs/cluster2.yaml &
+          KUBECONFIG=./configs/cluster1.yaml minikube start -p test-cluster-1 &
+          KUBECONFIG=./configs/cluster2.yaml minikube start -p test-cluster-2 &
           wait
 
-      - name: Run kube-switcher - switch to cluster 1
-        run: ./kube-switcher test-cluster-1
+      - name: Run kube-switcher - switch cluster context
+        run: ./kube-switcher context test-cluster-1
 
       - name: List Kubernetes Nodes
-        run: kubectl get nodes
+        run: kubectl get nodes | grep "test-cluster-1"
 
-      - name: Run kube-switcher - switch to cluster 2
-        run: ./kube-switcher test-cluster-2
+      - name: Run kube-switcher - switch cluster namespace
+        run: |
+          kubectl get pods | grep "No resources found in default namespace."
+          ./kube-switcher namespace kube-system
+          kubectl get pods | grep "apiserver"
+
+      - name: Run kube-switcher - switch context shorthand
+        run: |
+          ./kube-switcher ns default
+          kubectl get pods | grep "No resources found in default namespace."
+
+      - name: Run kube-switcher - switch cluster shorthand
+        run: ./kube-switcher ctx test-cluster-2
 
       - name: List Kubernetes Nodes
-        run: kubectl get nodes
+        run: kubectl get nodes | grep "test-cluster-2"
