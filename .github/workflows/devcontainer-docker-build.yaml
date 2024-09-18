@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: DevContainer Docker Build
+
+on:
+  workflow_dispatch: {}
+
+  pull_request:
+    paths:
+      - ".github/workflows/devcontainer-build.yaml"
+      - ".devcontainer/Dockerfile"
+
+jobs:
+  release:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-docker-build-push.yaml@df1ea2563affc3e30cc8a5e4b4f75a495e5e89a3 # v3.4.4
+    secrets: inherit
+    with:
+      image: "ghcr.io/mirceanton/kube-switcher-devcontainer"
+      platforms: linux/amd64
+      tags: test
+      context: ./.devcontainer
+      dockerfile: ./.devcontainer/Dockerfile
+      dry-run: true

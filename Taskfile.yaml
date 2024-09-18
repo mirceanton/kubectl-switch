@@ -1,5 +1,12 @@
 ---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: "3"
+
+env:
+  VERSION:
+    sh: git describe --tags --always --dirty
+  DIR_NAME:
+    sh: basename $(git rev-parse --show-toplevel)
 
 tasks:
   build:
