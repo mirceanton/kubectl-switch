@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Release
+
+on:
+  # Manual Trigger
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Dry Run
+        required: false
+        default: false
+        type: boolean
+
+  # Dry Run on any PR that changes this pipeline or that should ultimately trigger a release when merged
+  pull_request:
+    paths:
+      - ".github/workflows/release.yaml"
+      - "go.mod"
+      - "go.sum"
+      - "**/**.go"
+
+  # "Wet" Run on any push to the main branch that modified a go-related file
+  push:
+    branches: ["main", "master"]
+    paths:
+      - "go.mod"
+      - "go.sum"
+      - "**/**.go"
+
+jobs:
+  git:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-release-semver.yaml@df1ea2563affc3e30cc8a5e4b4f75a495e5e89a3 # v3.4.4
+    secrets: inherit
+    with:
+      dry-run: ${{ inputs.dry-run || github.event_name == 'pull_request' }}
+
+  goreleaser:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-release.yaml@df1ea2563affc3e30cc8a5e4b4f75a495e5e89a3 # v3.4.4
+    needs: [git]
+    secrets: inherit
+    with:
+      dry-run: ${{ inputs.dry-run || github.event_name == 'pull_request' }}
