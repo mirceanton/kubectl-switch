@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Test E2E
+
+on:
+  # Manual Trigger
+  workflow_dispatch: {}
+
+  # Run on any PR that changes this pipeline or that should ultimately trigger a release when merged
+  pull_request:
+    paths:
+      - ".github/workflows/test.yaml"
+      - "go.mod"
+      - "go.sum"
+      - "**/**.go"
+
+env:
+  KUBECONFIG_DIR: ./configs/
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Build `kube-switcher`
+        run: go build -o kube-switcher
+
+      - name: Install `kind`
+        run: go install sigs.k8s.io/kind@v0.24.0
+
+      - name: Set Up Kubernetes Clusters
+        run: |
+          kind create cluster --name=test-cluster-1 --kubeconfig=./configs/cluster1.yaml &
+          kind create cluster --name=test-cluster-2 --kubeconfig=./configs/cluster2.yaml &
+          wait
+
+      - name: Run kube-switcher - switch to cluster 1
+        run: ./kube-switcher test-cluster-1
+
+      - name: List Kubernetes Nodes
+        run: kubectl get nodes
+
+      - name: Run kube-switcher - switch to cluster 2
+        run: ./kube-switcher test-cluster-2
+
+      - name: List Kubernetes Nodes
+        run: kubectl get nodes
