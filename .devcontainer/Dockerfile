@@ -1,7 +1,7 @@
 ## ================================================================================================
 # Utility versions
 ## ================================================================================================
-ARG KUBECTL_VERSION=1.31.1@sha256:27e5f500a2de2ba249a159c4af0b075500ad8a1afaa59ba1edf09bf83c656fd4
+ARG KUBECTL_VERSION=1.31.1@sha256:da4a9868e20d941636087cb8624a4bb441f5249d69e8f3d27e53c7d4d280a5f3
 ARG K9S_VERSION=v0.32.4@sha256:32e0cf06b70f1b7e7576b64b378170ddda194b491ef4d04b7303f1b8ab81a771
 ARG TASKFILE_VERSION=v3.38.0@sha256:308c4f5be86bffae3f956cbd7225c4fec69b0e7a89012120b818a10df45d7c59
 
