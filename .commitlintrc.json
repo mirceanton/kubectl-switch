@@ -6,6 +6,7 @@
       [
         "chore",
         "ci",
+        "deps",
         "feat",
         "fix",
         "patch",
