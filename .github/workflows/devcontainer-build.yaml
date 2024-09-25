@@ -12,7 +12,7 @@ on:
 
 jobs:
   release:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-docker-build-push.yaml@b15f79125a97349d2f1043d1556d6e3cebae2227 # v3.4.5
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-docker-build-push.yaml@5a742438be20864a4bf11eb158cc402cf970dd79 # v3.4.6
     secrets: inherit
     with:
       image: "ghcr.io/mirceanton/kube-switcher-devcontainer"
