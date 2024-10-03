@@ -30,13 +30,13 @@ on:
 
 jobs:
   git:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-release-semver.yaml@f9e9b15c9203f390e79824a48408747deb7e89be # v3.4.12
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-release-semver.yaml@0597f9bbb74266a6163f20579f414733e5f52870 # v3.4.13
     secrets: inherit
     with:
       dry-run: ${{ inputs.dry-run || github.event_name == 'pull_request' }}
 
   goreleaser:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-release.yaml@f9e9b15c9203f390e79824a48408747deb7e89be # v3.4.12
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-release.yaml@0597f9bbb74266a6163f20579f414733e5f52870 # v3.4.13
     needs: [git]
     secrets: inherit
     with:
