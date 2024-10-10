@@ -33,7 +33,7 @@ concurrency:
 
 jobs:
   renovate:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-renovate.yaml@fe8cb068ccf362fa75af3e2336fb24e1b04c5ccf # v3.4.15
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-renovate.yaml@17c7b1454eb6e93d723a5fb2b55045d3fa767a80 # v3.4.16
     secrets: inherit
     with:
       dry-run: "${{ inputs.dry-run == true || github.event_name == 'pull_request' }}"
