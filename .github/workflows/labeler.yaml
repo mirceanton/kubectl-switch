@@ -7,7 +7,7 @@ on:
 
 jobs:
   pr-labeler:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-labeler.yaml@fe8cb068ccf362fa75af3e2336fb24e1b04c5ccf # v3.4.15
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-labeler.yaml@17c7b1454eb6e93d723a5fb2b55045d3fa767a80 # v3.4.16
     secrets: inherit
     with:
       config-file: .github/labeler.yaml
