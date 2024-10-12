@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/mirceanton/kube-switcher/cmd"
+	"github.com/mirceanton/kubectl-switch/cmd"
 )
 
 func main() {

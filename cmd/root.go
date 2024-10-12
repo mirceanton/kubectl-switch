@@ -12,9 +12,9 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "kube-switcher",
+	Use:     "kubectl-switch",
 	Short:   "A tool to switch Kubernetes contexts",
-	Long:    `kube-switcher is a CLI tool to switch Kubernetes contexts from multiple kubeconfig files.`,
+	Long:    `kubectl-switch is a CLI tool to switch Kubernetes contexts from multiple kubeconfig files.`,
 	Version: version,
 }
 

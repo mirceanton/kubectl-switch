@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 version: 2
-project_name: kube-switcher
+project_name: kubectl-switch
 
 before:
   hooks:
@@ -52,7 +52,7 @@ nfpms:
     formats: [deb, apk, rpm]
 
 brews:
-  - name: kube-switcher
+  - name: kubectl-switch
     description: A simple tool to switch between Kubernetes contexts.
     license: MIT
     homepage: https://github.com/mirceanton/{{.ProjectName}}

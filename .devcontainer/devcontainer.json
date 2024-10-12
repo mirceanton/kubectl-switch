@@ -1,5 +1,5 @@
 {
-  "name": "kube-switcher",
+  "name": "kubectl-switch",
   "build": {
     "dockerfile": "Dockerfile"
   },
