@@ -24,23 +24,71 @@ What I wanted was something much simpler conceptually: I just want to dump all m
 
 ## Installation
 
-1. Download the latest release from the [releases page](https://github.com/mirceanton/kube-switcher/releases).
-2. Extract the archive.
-3. Move the binary to a directory in your `$PATH`. For example:
+> [!TIP]
+> When installing `kube-switcher`, you can use it as a `kubectl` plugin by just renaming the binary to `kubectl-switch`.
+> This way, you can run it via `kubectl switch ...`
 
-    ```sh
-    sudo mv kubeconfig-switcher /usr/local/bin/
+### Download Precompiled Binaries
+
+Precompiled binaries are available for various platforms. You can download the latest release from the [GitHub Releases page](https://github.com/mirceanton/kube-switcher/releases/latest).
+
+1. Download the appropriate binary for your system and extract the archive.
+2. Make the extracted binary executable:
+
+    ```bash
+    chmod +x kube-switcher
     ```
 
-### Installing as a `kubectl` plugin
+3. Move the binary to a directory in your PATH:
 
-To install this as a `kubectl` plugin, simply rename the binary to `kubectl-switch`, i.e.
+    ```bash
+    mv kube-switcher /usr/local/bin/kube-switcher
+    ```
 
-```sh
-sudo mv kubeconfig-switcher /usr/local/bin/kubectl-switch
+### Running via Docker
+
+`kube-switcher` is also available as a Docker container:
+
+```bash
+docker pull ghcr.io/mirceanton/kube-switcher
 ```
 
-From now on, you should be able to invoke it via `kubectl switch`.
+### Install via homebrew
+
+1. Add the tap
+
+    ```bash
+    brew tap mirceanton/taps
+    ```
+
+2. Install `kube-switcher`
+
+    ```bash
+    brew install kube-switcher
+    ```
+
+### Build from Source
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/mirceanton/kube-switcher
+    cd kube-switcher
+    ```
+
+2. Build the tool:
+
+    If you have [Taskfile](https://taskfile.dev/) installed, run:
+
+    ```bash
+    task build
+    ```
+
+    Otherwise, simply run the `go build` command:
+
+    ```bash
+    go build -o talswitcher
+    ```
 
 ## Usage
 

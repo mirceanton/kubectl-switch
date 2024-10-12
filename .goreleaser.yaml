@@ -51,6 +51,21 @@ nfpms:
     license: MIT
     formats: [deb, apk, rpm]
 
+brews:
+  - name: kube-switcher
+    description: A simple tool to switch between Kubernetes contexts.
+    license: MIT
+    homepage: https://github.com/mirceanton/{{.ProjectName}}
+    directory: Formula
+    repository:
+      owner: mirceanton
+      name: homebrew-taps
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    test: system "#{bin}/kubectl-switch", "--help"
+    commit_author:
+      name: mr-borboto[bot]
+      email: 170036086+mr-borboto[bot]@users.noreply.github.com
+
 dockers:
   - image_templates:
       - "ghcr.io/mirceanton/{{.ProjectName}}:v{{.Version}}-amd64"
