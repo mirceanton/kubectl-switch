@@ -3,9 +3,13 @@
 version: "3"
 
 tasks:
-  build:
+  release:
     desc: Run goreleaser in snapshot mode.
     cmd: goreleaser release --snapshot --clean
+
+  build:
+    desc: Build the binary.
+    cmd: go build -o ./talswitcher .
 
   test:
     desc: Run tests.
