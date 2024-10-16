@@ -23,7 +23,7 @@ FROM goreleaser/goreleaser:${GORELEASER_VERSION} AS goreleaser
 ## ================================================================================================
 ## Main image
 ## ================================================================================================
-FROM mcr.microsoft.com/devcontainers/go:1.23-bookworm@sha256:16c623ad4c8b5f2e45e51ba0d26229306be00bffe51826c3d9acde94188086f1 AS workspace
+FROM mcr.microsoft.com/devcontainers/go:1.23-bookworm@sha256:2e00578e7c526e76ebd51597260928d8542d27c17ffe6390d79200638c51a3e6 AS workspace
 
 # Install additional tools
 COPY --from=kubectl /opt/bitnami/kubectl/bin/kubectl /usr/local/bin/kubectl
