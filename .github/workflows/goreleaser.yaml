@@ -26,7 +26,7 @@ on:
 
 jobs:
   goreleaser:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-release.yaml@155cb0eb3f146478d30884e385490eb28ce6fd7c # v3.4.21
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-release.yaml@2a155b83746904fc3d6e784663ef7e94ceca11f8 # v3.4.23
     secrets: inherit
     with:
       dry-run: ${{ inputs.dry-run || github.event_name == 'pull_request' }}
