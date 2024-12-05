@@ -1,4 +1,4 @@
-FROM alpine:3.21.0@sha256:eb37f58646a901dc7727cf448cae36daaefaba79de33b5058dab79aa4c04aefb
+FROM alpine:3.21.0@sha256:e323a465c03a31ad04374fc7239144d0fd4e2b92da6e3e0655580476d3a84621
 USER 8675:8675
 COPY kubectl-switch /
 ENTRYPOINT ["/kubectl-switch"]
