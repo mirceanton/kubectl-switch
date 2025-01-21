@@ -1,4 +1,4 @@
-module github.com/mirceanton/kubectl-switch/v2
+module github.com/mirceanton/kubectl-switch
 
 go 1.23.0
 
