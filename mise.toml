@@ -1,11 +1,37 @@
+# =================================================================================================
+# Envs
+# =================================================================================================
+[env]
+CGO_ENABLED=1
+
+
+# =================================================================================================
+# Tools
+# =================================================================================================
 [tools]
 go = "latest"
 "aqua:goreleaser/goreleaser" = "latest"
 "aqua:golangci/golangci-lint" = "latest"
-
 "aqua:kubernetes/kubectl" = "latest"
-"aqua:derailed/k9s" = "latest"
 "aqua:kubernetes/minikube" = "latest"
+"aqua:derailed/k9s" = "latest"
 
-"aqua:cli/cli" = "latest"
-"aqua:go-task/task" = "latest"
+
+# =================================================================================================
+# Tasks
+# =================================================================================================
+[tasks.release]
+description = "Run goreleaser in snapshot mode."
+run = "goreleaser release --snapshot --clean"
+
+[tasks.build]
+description = "Build the binary."
+run = "go build -o ./kubectl-switch ."
+
+[tasks.test]
+description = "Run tests."
+run = "go test -v ./... -race -covermode=atomic"
+
+[tasks.lint]
+description = "Run linter."
+run = "golangci-lint run --fix"
