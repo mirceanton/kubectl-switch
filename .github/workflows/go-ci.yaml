@@ -26,7 +26,7 @@ on:
 
 jobs:
   lint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@71c748260211464d1d58c43d7fb019f7adac19b3 # v3.5.1
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@chore/cleanup
     secrets: inherit
 
   test:
@@ -44,7 +44,7 @@ jobs:
 
   goreleaser:
     needs: [lint, test]
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-release.yaml@71c748260211464d1d58c43d7fb019f7adac19b3 # v3.5.1
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-release.yaml@chore/cleanup
     secrets: inherit
     with:
       dry-run: ${{ inputs.dry-run || github.event_name == 'pull_request' }}
