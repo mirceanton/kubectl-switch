@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: Goreleaser
+name: Go CI/CD
 
 on:
   # Manual Trigger
@@ -25,7 +25,25 @@ on:
     tags: ["*"]
 
 jobs:
+  lint:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@71c748260211464d1d58c43d7fb019f7adac19b3 # v3.5.1
+    secrets: inherit
+
+  test:
+    runs-on: ubuntu-latest
+    container: docker.io/library/golang:1.24.0-bookworm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install minikube
+        run: go install k8s.io/minikube/cmd/minikube@latest
+
+      - name: Run Tests
+        run: bash scripts/test.sh
+
   goreleaser:
+    needs: [lint, test]
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-release.yaml@71c748260211464d1d58c43d7fb019f7adac19b3 # v3.5.1
     secrets: inherit
     with:
