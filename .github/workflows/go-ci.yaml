@@ -27,7 +27,7 @@ jobs:
     secrets: inherit
     with:
       go-version: 1.24
-      golangci-lint-version: 1.64.3
+      golangci-lint-version: v1.64.3
 
   test:
     runs-on: ubuntu-latest
@@ -46,4 +46,4 @@ jobs:
     with:
       dry-run: ${{ inputs.dry-run || github.event_name == 'pull_request' }}
       go-version: 1.24
-      goreleaser-version: 2.7.0
+      goreleaser-version: v2.7.0
