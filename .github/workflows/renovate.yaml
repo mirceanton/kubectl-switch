@@ -17,12 +17,6 @@ on:
         required: false
         type: string
 
-  # Dry Run on any PR that changes the renovate config or the renovate workflow
-  pull_request:
-    paths:
-      - .github/workflows/renovate.yaml
-      - renovate.json5
-
   # "Wet" Run every 20 minutes
   schedule:
     - cron: "*/20 * * * *"
@@ -33,9 +27,9 @@ concurrency:
 
 jobs:
   renovate:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-renovate.yaml@71c748260211464d1d58c43d7fb019f7adac19b3 # v3.5.1
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-renovate.yaml@v3.8.0
     secrets: inherit
     with:
       dry-run: "${{ inputs.dry-run == true || github.event_name == 'pull_request' }}"
       log-level: "${{ inputs.log-level || 'debug' }}"
-      config-file: "renovate.json5"
+      config-file: .github/configs/renovate.json5

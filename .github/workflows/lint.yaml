@@ -3,35 +3,43 @@
 name: Lint
 
 on:
-  # Manual Trigger
   workflow_dispatch: {}
-
-  # Run on any PR
   pull_request: {}
 
 jobs:
-  golangci-lint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@71c748260211464d1d58c43d7fb019f7adac19b3 # v3.5.1
-    secrets: inherit
-
-  yamllint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-yamllint.yaml@71c748260211464d1d58c43d7fb019f7adac19b3 # v3.5.1
+  lint:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@v3.8.0
     secrets: inherit
     with:
-      yamllint-args: "--config-file=.yamllint.yaml"
+      # renovate: depName=go datasource=golang-version
+      go-version: 1.24
+      # renovate: depName=golangci/golangci-lint datasource=github-tags
+      golangci-lint-version: v1.64.3
 
-  actionlint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-actionlint.yaml@71c748260211464d1d58c43d7fb019f7adac19b3 # v3.5.1
+  actions:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-actionlint.yaml@v3.8.0
+    secrets: inherit
+    with:
+      config-file: .github/configs/actionlint.yaml
+
+  commits:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-commitlint.yaml@v3.8.0
+    secrets: inherit
+    with:
+      config-file: ./.github/configs/commitlint.config.mjs
+
+  markdown:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-markdownlint.yaml@v3.8.0
+    secrets: inherit
+    with:
+      config-file: .github/configs/.markdownlint.yaml
+
+  shell:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-shellcheck.yaml@v3.8.0
     secrets: inherit
 
-  shellcheck:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-shellcheck.yaml@71c748260211464d1d58c43d7fb019f7adac19b3 # v3.5.1
+  yaml:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-yamlfmt.yaml@v3.8.0
     secrets: inherit
-
-  markdownlint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-markdownlint.yaml@71c748260211464d1d58c43d7fb019f7adac19b3 # v3.5.1
-    secrets: inherit
-
-  commitlint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-commitlint.yaml@71c748260211464d1d58c43d7fb019f7adac19b3 # v3.5.1
-    secrets: inherit
+    with:
+      config-file: .github/configs/yamlfmt.yaml
