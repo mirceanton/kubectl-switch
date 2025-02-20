@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@feat/go
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@main
     secrets: inherit
     with:
       # renovate: depName=go datasource=golang-version
