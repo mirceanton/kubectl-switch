@@ -8,29 +8,29 @@ on:
 
 jobs:
   actionlint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-actionlint.yaml@chore/cleanup
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-actionlint.yaml@main
     secrets: inherit
     with:
       config-file: .github/configs/actionlint.yaml
 
   commitlint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-commitlint.yaml@chore/cleanup
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-commitlint.yaml@main
     secrets: inherit
     with:
       config-file: ./.github/configs/commitlint.config.mjs
 
   markdownlint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-markdownlint.yaml@chore/cleanup
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-markdownlint.yaml@main
     secrets: inherit
     with:
       config-file: .github/configs/.markdownlint.yaml
 
   shellcheck:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-shellcheck.yaml@chore/cleanup
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-shellcheck.yaml@main
     secrets: inherit
 
   yamllint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-yamllint.yaml@chore/cleanup
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-yamllint.yaml@main
     secrets: inherit
     with:
       config-file: .github/configs/.yamllint.yaml

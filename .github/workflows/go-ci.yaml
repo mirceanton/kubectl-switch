@@ -3,7 +3,9 @@
 name: Go CI/CD
 
 on:
-  # Manual Trigger
+  push:
+    tags: ["*"]
+
   workflow_dispatch:
     inputs:
       dry-run:
@@ -12,7 +14,6 @@ on:
         default: false
         type: boolean
 
-  # Dry Run on any PR that changes this pipeline or that should ultimately trigger a release when merged
   pull_request:
     paths:
       - ".github/workflows/goreleaser.yaml"
@@ -20,13 +21,9 @@ on:
       - "go.sum"
       - "**/**.go"
 
-  # "Wet" Run on any tag push
-  push:
-    tags: ["*"]
-
 jobs:
   lint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@chore/cleanup
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@feat/go
     secrets: inherit
 
   test:
@@ -43,7 +40,7 @@ jobs:
 
   goreleaser:
     needs: [lint, test]
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-release.yaml@chore/cleanup
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-release.yaml@feat/go
     secrets: inherit
     with:
       dry-run: ${{ inputs.dry-run || github.event_name == 'pull_request' }}
