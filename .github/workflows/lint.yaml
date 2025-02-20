@@ -7,6 +7,15 @@ on:
   pull_request: {}
 
 jobs:
+  lint:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@feat/go
+    secrets: inherit
+    with:
+      # renovate: depName=go datasource=golang-version
+      go-version: 1.24
+      # renovate: depName=golangci/golangci-lint datasource=github-tags
+      golangci-lint-version: v1.64.3
+
   actions:
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-actionlint.yaml@main
     secrets: inherit

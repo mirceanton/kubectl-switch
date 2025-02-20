@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Test
+
+on:
+  # Manual Trigger
+  workflow_dispatch: {}
+
+  # Run on any PR that changes this pipeline or that should ultimately trigger a release when merged
+  pull_request:
+    paths:
+      - ".github/workflows/test.yaml"
+      - "go.mod"
+      - "go.sum"
+      - "**/**.go"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+
+      - name: Run Tests
+        run: mise run test
