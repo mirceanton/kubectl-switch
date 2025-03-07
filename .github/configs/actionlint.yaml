@@ -1,5 +1,0 @@
----
-self-hosted-runner:
-  labels:
-    - kubernetes-runners # auto-scaling runners on K8S
-    - proxmox-runners # VM runner on PVE
