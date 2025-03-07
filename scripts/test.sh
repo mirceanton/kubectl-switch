@@ -86,7 +86,17 @@ run_tests() {
         exit 1
     }
 
+    echo "Switching to previous context..."
+    ./kubectl-switch -
+
+    echo "Validating cluster switch to test-cluster-1..."
+    kubectl get nodes | grep "test-cluster-1" || {
+        echo "Error: test-cluster-1 not found in node list!" >&2
+        exit 1
+    }
+    echo "========================================================================================="
     echo "Tests completed successfully!"
+    echo "========================================================================================="
 }
 
 # Set up trap to ensure cleanup happens on exit
