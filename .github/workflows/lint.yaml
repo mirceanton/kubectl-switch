@@ -7,7 +7,7 @@ on:
   pull_request: {}
 
 jobs:
-  lint:
+  go:
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
     secrets: inherit
     with:
@@ -16,30 +16,21 @@ jobs:
       # renovate: depName=golangci/golangci-lint datasource=github-tags
       golangci-lint-version: v1.64.3
 
-  actions:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-actionlint.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
+  bash:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-shellcheck.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
     secrets: inherit
-    with:
-      config-file: .github/configs/actionlint.yaml
-
   commits:
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-commitlint.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
     secrets: inherit
-    with:
-      config-file: ./.github/configs/commitlint.config.mjs
-
+    with: { config-file: ./.github/configs/commitlint.config.mjs }
+  github-actions:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-actionlint.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
+    secrets: inherit
   markdown:
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-markdownlint.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
     secrets: inherit
-    with:
-      config-file: .github/configs/.markdownlint.yaml
-
-  shell:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-shellcheck.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
-    secrets: inherit
-
+    with: { config-file: .github/configs/.markdownlint.yaml }
   yaml:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-yamlfmt.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-yamllint.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
     secrets: inherit
-    with:
-      config-file: .github/configs/yamlfmt.yaml
+    with: { config-file: .github/configs/yamllint.yaml }

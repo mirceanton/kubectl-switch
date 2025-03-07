@@ -16,6 +16,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/goreleaser.yaml"
+      - .goreleaser.yaml
       - "go.mod"
       - "go.sum"
       - "**/**.go"
