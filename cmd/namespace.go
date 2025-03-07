@@ -7,9 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	namespaceManager = kubeconfig.NewNamespaceManager(manager)
-)
+var namespaceManager = kubeconfig.NewNamespaceManager(manager)
 
 var namespaceCmd = &cobra.Command{
 	Use:     "namespace",

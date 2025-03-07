@@ -7,9 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	contextManager = kubeconfig.NewContextManager(manager)
-)
+var contextManager = kubeconfig.NewContextManager(manager)
 
 var contextCmd = &cobra.Command{
 	Use:     "context",

@@ -47,7 +47,7 @@ func (m *Manager) SaveCurrent() error {
 		return err
 	}
 
-	return os.WriteFile(prevPath, data, 0600)
+	return os.WriteFile(prevPath, data, 0o600)
 }
 
 // SwitchToPrevious switches back to the previous Kubernetes config
@@ -76,17 +76,17 @@ func (m *Manager) SwitchToPrevious() error {
 	}
 
 	// Write current to temp
-	if err := os.WriteFile(tempPath, currentConfig, 0600); err != nil {
+	if err := os.WriteFile(tempPath, currentConfig, 0o600); err != nil {
 		return err
 	}
 
 	// Write previous to current
-	if err := os.WriteFile(kubeconfigPath, prevConfig, 0600); err != nil {
+	if err := os.WriteFile(kubeconfigPath, prevConfig, 0o600); err != nil {
 		return err
 	}
 
 	// Write temp to previous
-	if err := os.WriteFile(prevPath, currentConfig, 0600); err != nil {
+	if err := os.WriteFile(prevPath, currentConfig, 0o600); err != nil {
 		return err
 	}
 
