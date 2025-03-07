@@ -10,10 +10,11 @@ import (
 var namespaceManager = kubeconfig.NewNamespaceManager(manager)
 
 var namespaceCmd = &cobra.Command{
-	Use:     "namespace",
-	Aliases: []string{"ns"},
-	Short:   "Switch the active Kubernetes namespace",
-	Args:    cobra.MaximumNArgs(1),
+	Use:               "namespace",
+	Aliases:           []string{"ns"},
+	Short:             "Switch the active Kubernetes namespace",
+	Args:              cobra.MaximumNArgs(1),
+	ValidArgsFunction: getNamespaceCompletions,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Get all namespaces from the current context
 		namespaceNames, err := namespaceManager.GetNamespaces()
@@ -47,4 +48,14 @@ var namespaceCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(namespaceCmd)
+}
+
+// getNamespaceCompletions provides bash completion for available namespaces
+func getNamespaceCompletions(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	namespaceNames, err := namespaceManager.GetNamespaces()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	return namespaceNames, cobra.ShellCompDirectiveNoFileComp
 }

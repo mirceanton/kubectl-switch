@@ -15,7 +15,11 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "kubectl-switch",
+	Use:     "kubectl switch",
+	Aliases: []string{"kubectl swtich"},
+	Annotations: map[string]string{
+		cobra.CommandDisplayNameAnnotation: "kubectl switch",
+	},
 	Short:   "A tool to switch Kubernetes contexts",
 	Long:    `kubectl-switch is a CLI tool to switch Kubernetes contexts from multiple kubeconfig files.`,
 	Version: version,

@@ -10,10 +10,11 @@ import (
 var contextManager = kubeconfig.NewContextManager(manager)
 
 var contextCmd = &cobra.Command{
-	Use:     "context",
-	Aliases: []string{"ctx"},
-	Short:   "Switch the active Kubernetes context",
-	Args:    cobra.MaximumNArgs(1),
+	Use:               "context",
+	Aliases:           []string{"ctx"},
+	Short:             "Switch the active Kubernetes context",
+	ValidArgsFunction: getContextCompletions,
+	Args:              cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		// Validate and get the config directory
 		validConfigDir, err := contextManager.ValidateConfigDir(configDir)
@@ -60,4 +61,20 @@ var contextCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(contextCmd)
+}
+
+// getContextCompletions provides bash completion for available contexts
+func getContextCompletions(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	configDirFlag, _ := cmd.Flags().GetString("kubeconfig-dir")
+	validConfigDir, err := contextManager.ValidateConfigDir(configDirFlag)
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	_, contextNames, err := contextManager.GetContextsFromDir(validConfigDir)
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	return contextNames, cobra.ShellCompDirectiveNoFileComp
 }
