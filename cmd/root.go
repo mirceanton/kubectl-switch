@@ -15,8 +15,7 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "kubectl switch",
-	Aliases: []string{"kubectl swtich"},
+	Use: "kubectl-switch",
 	Annotations: map[string]string{
 		cobra.CommandDisplayNameAnnotation: "kubectl switch",
 	},
