@@ -1,15 +1,20 @@
 # kubectl-switch
 
-A simple tool to manage and switch between multiple Kubernetes configuration files. This tool allows you to dump all your kubeconfig files in a single directory and easily switch between them as well as configure the current namespace.
+`kubectl-switch` is a command-line tool for managing and switching between multiple Kubernetes configuration files located in the same directory. It simplifies the process of selecting a Kubernetes context from multiple kubeconfig files and updating the active configuration or namespace.
+
+Just dump all your `kubeconfigs` into a single dir and let `kubectl-switch` manage them for you!
 
 ## Features
 
-- Manage multiple kubeconfig files in a single directory.
-- Easily switch between different Kubernetes contexts.
-- Easily switch between different namespaces.
-- Persistent context/namespace switching across different shells.
-- Interactive prompts support fuzzy search.
-- Non-destructive operations on your original kubeconfig files. `kubectl-switch` will never edit those. It will only work with copies of them.
+- **Multiple kubeconfig files**: Manage multiple kubeconfig files with one or more contexts each, all present in a single directory. You don't have to generate a global kubeconfig to hold all of your contexts
+- **Context Switching**: Easily switch between different Kubernetes contexts from multiple config files.
+- **Namespace Switching**: Quickly change the current namespace in the active context.
+- **Previous Config**: Switch back to the previous configuration with `kubectl switch -`.
+- **Non-Interactive Mode**: Specify the desired context or namespace directly as an argument.
+- **Interactive Mode**: Run the program with no arguments to get an interactive list of available namespaces or contexts to choose from.
+- **Persistent Configuration**: Changes persist across different shell sessions.
+- **Shell Completions**: Provides tab completion for available contexts and namespaces.
+- **Non-destructive**: `kubectl-switch` will never edit those. It will only work with copies of them.
 
 ## Why `kubectl-switch`?
 
@@ -72,93 +77,85 @@ docker pull ghcr.io/mirceanton/kubectl-switch
 
 2. Build the tool:
 
-    If you have [Taskfile](https://taskfile.dev/) installed, run:
-
     ```bash
-    task build
-    ```
-
-    Otherwise, simply run the `go build` command:
-
-    ```bash
-    go build -o kubectl-switch
+    mise run build
     ```
 
 ## Usage
 
-1. Place all of your `kubeconfig` files in a single directory. I personally prefer `~/.kube/configs/` but you can do whatever you fancy.
+### Context Command
 
-2. Set the environment variable `KUBECONFIG_DIR`
+The `context` (or `ctx`) subcommand is used to switch between Kubernetes contexts (think of `kubectx`):
 
-    ```sh
-    export KUBECONFIG_DIR="~/.kube/configs/" # <- put here whatever folder you decided on at step 1
-    ```
+```bash
+# Interactive mode - select context from a list
+kubectl-switch context
 
-3. Run `kubectl switch ctx` or `kubectl switch context` to interactively select your context from a list
+# Switch to a specific context
+kubectl-switch ctx my-context
+```
 
-    ```sh
-    vscode ➜ /workspaces/kubectl-switch $ kubectl switch context
-    ? Choose a context:  [Use arrows to move, type to filter]
-      cluster1kubectl-switch
-      cluster2
-    > cluster3kubectl-switch
+### Namespace Command
 
-    INFO[0102] Switched tkubectl-switchuster3'
+The `namespace` (or `ns`) subcommand is used to switch the current namespace (think of `kubens`):
 
-    vscode ➜ /workspaces/kubectl-switch $ kubectl get nodes
-    NAME       STATUS   ROLES           AGE   VERSION
-    cluster3   Ready    control-plane   21h   v1.30.0
-    ```
+```bash
+# Interactive mode - select namespace from a list
+kubectl-switch namespace
 
-    Alternatively, pass in a context name to the command to non-interactively switch to it:
+# Switch to a specific namespace
+kubectl-switch ns kube-system
+```
 
-    ```sh
-    vscode ➜ /workspaces/kubectl-switch $ kubectl switch ctx cluster3
-    INFO[0000] Switched to context 'cluster3'
+### Quickly Switch to Previous Configuration
 
-    vscode ➜ /workspaces/kubectl-switch $ kubectl get nodes
-    NAME       STATUS   ROLES           AGE   VERSION
-    cluster3   Ready    control-plane   21h   v1.30.0
-    ```
+Switch back to the previous configuration:
 
-    This will literally detect the file in which that context is defined and copy-paste it to the path defined in your `KUBECONFIG`.
+```bash
+kubectl-switch -
+```
 
-4. Run the `kubectl switch ns` or `kubectl switch namespace` to interactively select your current namespace from a list
+### Usage with kubectl plugin
 
-    ```sh
-    vscode ➜ /workspaces/kubectl-switch $ kubectl switch namespace
-    ? Choose a namespace:  [Use arrows to move, type to filter]
-    > default
-      kube-node-lease
-      kube-public
-      kube-system
+When installed as a kubectl plugin, you can use it directly with the `kubectl` command:
 
-    INFO[0012] Switched to namespace 'kube-system'
+```sh
+# These commands are equivalent
+kubectl-switch ctx
+kubectl switch ctx
+```
 
-    vscode ➜ /workspaces/kubectl-switch $ kubectl get pods
-    NAME                               READY   STATUS    RESTARTS      AGE
-    coredns-7db6d8ff4d-nqmlf           1/1     Running   1 (69m ago)   21h
-    etcd-cluster1                      1/1     Running   1 (69m ago)   21h
-    kube-apiserver-cluster1            1/1     Running   1 (69m ago)   21h
-    kube-controller-manager-cluster1   1/1     Running   1 (69m ago)   21h
-    kube-proxy-lxnvr                   1/1     Running   1 (69m ago)   21h
-    kube-scheduler-cluster1            1/1     Running   1 (69m ago)   21h
-    storage-provisioner                1/1     Running   3 (68m ago)   21h
-    ```
+## Configuration
 
-    Alternatively, pass in a namespace name to the command to non-interactively switch to it:
+You can configure `kubectl-switch` using environment variables or CLI flags:
 
-    ```sh
-    vscode ➜ /workspaces/kubectl-switch $ kubectl get pods
-    No resources found in default namespace.
-    vscode ➜ /workspaces/kubectl-switch $ kubectl switch ns kube-public
-    INFO[0000] Switched to namespace 'kube-public'
-    vscode ➜ /workspaces/kubectl-switch $ kubectl get pods
-    No resources found in kube-public namespace.
-    ```
+|  Environment Variable  |     CLI Flag      |                   Description                    |        Default Value         |
+| :--------------------: | :---------------: | :----------------------------------------------: | :--------------------------: |
+|    `KUBECONFIG_DIR`    | `--kubeconfig-dir` | Directory containing your kubeconfig files.      |            None              |
+|     `KUBECONFIG`       |       N/A         | Path where the active kubeconfig will be stored. | `~/.kube/config`             |
 
-    This will modify your currently active kubeconfig file (not the original one from `KUBECONFIGS_DIR`, but rather the copy from `KUBECONFIG`) to set the current namespace.
+## Shell Completion
+
+The `completion` subcommand generates shell completion scripts:
+
+```bash
+# Generate completions for bash
+kubectl-switch completion bash > /etc/bash_completion.d/kubectl-switch
+
+# Generate completions for zsh
+kubectl-switch completion zsh > ~/.zsh/completion/_kubectl-switch
+
+# Generate completions for fish
+kubectl-switch completion fish > ~/.config/fish/completions/kubectl-switch.fish
+
+# Generate completions for powershell
+kubectl-switch completion powershell > ~/kubectl-switch.ps1
+```
+
+## Contributing
+
+Contributions are welcome! Please fork the repository, make your changes, and submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the MIT License. See the [`LICENSE`](./LICENSE) file for details.
