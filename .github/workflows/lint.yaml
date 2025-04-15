@@ -12,7 +12,7 @@ jobs:
     secrets: inherit
     with:
       # renovate: depName=golangci/golangci-lint datasource=github-tags
-      version: v2.0.2
+      version: v2.1.2
 
   bash:
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-shellcheck.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
