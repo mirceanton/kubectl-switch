@@ -7,28 +7,112 @@ on:
   pull_request: {}
 
 jobs:
-  go:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-lint.yaml@feat/custom-images
-    secrets: inherit
-    with:
-      # renovate: depName=golangci/golangci-lint datasource=github-tags
-      version: v2.1.2
+  golangci-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-  bash:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-shellcheck.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
-    secrets: inherit
-  commits:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-commitlint.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
-    secrets: inherit
-    with: { config-file: ./.github/configs/commitlint.config.mjs }
-  github-actions:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-actionlint.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
-    secrets: inherit
-  markdown:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-markdownlint.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
-    secrets: inherit
-    with: { config-file: .github/configs/.markdownlint.yaml }
-  yaml:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-yamllint.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
-    secrets: inherit
-    with: { config-file: .github/configs/yamllint.yaml }
+      - name: Get changed files
+        id: changed-files
+        uses: bjw-s-labs/action-changed-files@b1144fc772fca235a50902c7bb6cc431cc7d8e27 # v0.3.2
+        with:
+          patterns: |-
+            .github/workflows/golangci-lint.yaml
+            .golangci.yaml
+            "**.go"
+
+      - name: Generate Token
+        if: steps.changed-files.outputs.changed_files != '[]'
+        uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2.0.2
+        id: app-token
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      - name: Setup Go
+        if: steps.changed-files.outputs.changed_files != '[]'
+        uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b # v5.4.0
+        with:
+          go-version-file: go.mod
+
+      - name: Run golangci-lint
+        if: steps.changed-files.outputs.changed_files != '[]'
+        uses: golangci/golangci-lint-action@1481404843c368bc19ca9406f87d6e0fc97bdcfd # v7.0.0
+        with:
+          github-token: "${{ steps.app-token.outputs.token }}"
+          # renovate: datasource=github-tags packageName=golangci/golangci-lint
+          version: v2.1.2
+
+  # ===============================================================================================
+  # "Meta" linters
+  # ===============================================================================================
+  actionlint:
+    runs-on: ubuntu-latest
+    container: ghcr.io/mirceanton/gha-runner-actionlint:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Get changed files
+        id: changed-files
+        uses: bjw-s-labs/action-changed-files@b1144fc772fca235a50902c7bb6cc431cc7d8e27 # v0.3.2
+        with:
+          patterns: |-
+            .github/workflows/**/*.yml
+            .github/workflows/**/*.yaml
+
+      - name: Run actionlint
+        if: steps.changed-files.outputs.changed_files != '[]'
+        run: actionlint
+
+  commitlint:
+    runs-on: ubuntu-latest
+    container: ghcr.io/mirceanton/gha-runner-commitlint:latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Validate PR commits with CommitLint
+        run: echo "$PR_TITLE" | npx commitlint --extends=./.github/configs/commitlint.config.mjs
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+
+  markdownlint:
+    runs-on: ubuntu-latest
+    container: ghcr.io/mirceanton/gha-runner-markdownlint:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Get changed files
+        id: changed-files
+        uses: bjw-s-labs/action-changed-files@b1144fc772fca235a50902c7bb6cc431cc7d8e27 # v0.3.2
+        with:
+          patterns: |-
+            .github/configs/.markdownlint.yaml
+            **/*.md
+
+      - name: Run MarkdownLint
+        if: steps.changed-files.outputs.changed_files != '[]'
+        run: markdownlint --config=.github/configs/.markdownlint.yaml "**/*.md"
+
+  yamllint:
+    runs-on: ubuntu-latest
+    container: ghcr.io/mirceanton/gha-runner-yamllint:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Get changed files
+        id: changed-files
+        uses: bjw-s-labs/action-changed-files@b1144fc772fca235a50902c7bb6cc431cc7d8e27 # v0.3.2
+        with:
+          patterns: |-
+            **/*.yml
+            **/*.yaml
+
+      - name: Run yamllint
+        if: steps.changed-files.outputs.changed_files != '[]'
+        run: yamllint --config-file=.github/configs/yamllint.yaml .

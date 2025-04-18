@@ -12,26 +12,52 @@ on:
         default: false
         type: boolean
 
-  # Dry Run on any PR that changes this pipeline or that should ultimately trigger a release when merged
-  pull_request:
-    paths:
-      - ".github/workflows/goreleaser.yaml"
-      - .goreleaser.yaml
-      - "go.mod"
-      - "go.sum"
-      - "**/**.go"
-
   # "Wet" Run on any tag push
   push:
     tags: ["*"]
 
+  # Dry Run on any PR that changes the goreleaser config or the workflow
+  pull_request:
+    paths:
+      - .github/workflows/goreleaser.yaml
+      - .goreleaser.yaml
+
 jobs:
   goreleaser:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-go-release.yaml@feat/custom-images
-    secrets: inherit
-    with:
-      dry-run: ${{ inputs.dry-run || github.event_name == 'pull_request' }}
-      # renovate: depName=go datasource=golang-version
-      go-version: 1.24.2
-      # renovate: depName=goreleaser/goreleaser datasource=github-tags
-      goreleaser-version: v2.8.2
+    if: github.repository_owner == 'mirceanton' # ? don't run on forks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2.0.2
+        id: app-token
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          token: "${{ steps.app-token.outputs.token }}"
+          fetch-depth: 0
+
+      - name: Login to Container Registry
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
+        with:
+          registry: "ghcr.io"
+          username: "${{ github.actor }}"
+          password: "${{ secrets.GHCR_RW_TOKEN }}"
+
+      - name: Setup Go
+        uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b # v5.4.0
+        with:
+          go-version-file: go.mod
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@9c156ee8a17a598857849441385a2041ef570552 # v6.3.0
+        env:
+          GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
+          TAP_GITHUB_TOKEN: "${{ secrets.GHCR_RW_TOKEN }}"
+        with:
+          # renovate: datasource=github-tags packageName=goreleaser/goreleaser
+          version: v2.8.2
+          args: ${{ (inputs.dry-run || github.event_name == 'pull_request') && '--snapshot' || '--clean' }}
