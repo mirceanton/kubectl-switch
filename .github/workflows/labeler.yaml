@@ -1,6 +1,7 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Labeler
+permissions: { contents: read }
 
 on:
   pull_request_target: {}
@@ -41,4 +42,4 @@ jobs:
         with:
           sync-labels: true
           repo-token: "${{ steps.app-token.outputs.token }}"
-          configuration-path: .github/configs/labeler.yaml
+          configuration-path: .github/labeler.yaml

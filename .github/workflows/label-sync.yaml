@@ -1,9 +1,10 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Label Sync
+permissions: { contents: read }
 
 on:
-  # Manual Trigger
+  schedule: [{cron: '0 * * * *'}]
   workflow_dispatch:
     inputs:
       dry-run:
@@ -12,22 +13,16 @@ on:
         required: false
         type: boolean
 
-  # Dry Run on any PR that changes the labels config or the workflow
   pull_request:
     paths:
       - .github/workflows/label-sync.yaml
-      - .github/configs/labels.yaml
+      - .github/labels.yaml
 
-  # "Wet" Run on any push to the main branch that changes the labels config or the workflow
   push:
     branches: ["main", "master"]
     paths:
       - .github/workflows/label-sync.yaml
-      - .github/configs/labels.yaml
-
-  # "Wet" Run hourly
-  schedule:
-    - cron: "0 * * * *"
+      - .github/labels.yaml
 
 jobs:
   label-sync:
@@ -51,5 +46,4 @@ jobs:
         with:
           dry-run: "${{ (inputs.dry-run || github.event_name == 'pull_request') == true }}"
           token: "${{ steps.app-token.outputs.token }}"
-          delete-other-labels: true
-          config-file: .github/configs/labels.yaml
+          config-file: .github/labels.yaml
