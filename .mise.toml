@@ -1,0 +1,18 @@
+[tools]
+# Go tools
+go = "1.24.2"
+"aqua:golangci/golangci-lint" = "2.1.6"
+"aqua:goreleaser/goreleaser" = "2.9.0"
+
+# Kubernetes tools
+"aqua:kubernetes/kubectl" = "latest"
+"aqua:kubernetes/minikube" = "latest"
+"aqua:derailed/k9s" = "latest"
+
+# Linters
+"aqua:rhysd/actionlint" = "1.7.7"
+"npm:@commitlint/cli" = "19.8.0"
+
+# Renovate
+node = "22"
+"npm:renovate" = "40.8.1"
