@@ -1,3 +1,4 @@
 kubectl-switch
 dist/
 configs/
+.DS_Store
