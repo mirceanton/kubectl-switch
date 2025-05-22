@@ -27,6 +27,20 @@ What I wanted was something very simple conceptually: I just want to dump all my
 
 ## Installation
 
+### Install via go install
+
+Install the latest stable version directly using Go:
+
+```bash
+# Install the latest version
+go install github.com/mirceanton/kubectl-switch/v2@latest
+
+# Or install a specific version
+go install github.com/mirceanton/kubectl-switch/v2@v2.2.6
+```
+
+> **Note**: Versions prior to v2.2.6 cannot be installed via `go install` due to module path issues. If you need an older version, please use one of the alternative installation methods below.
+
 ### Download Precompiled Binaries
 
 Precompiled binaries are available for various platforms. You can download the latest release from the [GitHub Releases page](https://github.com/mirceanton/kubectl-switch/releases/latest).
@@ -44,15 +58,7 @@ Precompiled binaries are available for various platforms. You can download the l
     mv kubectl-switch /usr/local/bin/kubectl-switch
     ```
 
-### Running via Docker
-
-`kubectl-switch` is also available as a Docker container:
-
-```bash
-docker pull ghcr.io/mirceanton/kubectl-switch
-```
-
-### Install via homebrew
+### Install via Homebrew
 
 1. Add the tap
 
@@ -66,6 +72,22 @@ docker pull ghcr.io/mirceanton/kubectl-switch
     brew install kubectl-switch
     ```
 
+### Running via Docker
+
+`kubectl-switch` is also available as a Docker container:
+
+```bash
+docker pull ghcr.io/mirceanton/kubectl-switch
+```
+
+To use it with your local kubeconfig files:
+
+```bash
+docker run -v ~/.kube:/root/.kube -v /path/to/kubeconfigs:/kubeconfigs \
+    -e KUBECONFIG_DIR=/kubeconfigs \
+    ghcr.io/mirceanton/kubectl-switch context
+```
+
 ### Build from Source
 
 1. Clone the repository:
@@ -78,7 +100,13 @@ docker pull ghcr.io/mirceanton/kubectl-switch
 2. Build the tool:
 
     ```bash
-    mise run build
+    go build -o kubectl-switch
+    ```
+
+3. Move the binary to your PATH:
+
+    ```bash
+    mv kubectl-switch /usr/local/bin/kubectl-switch
     ```
 
 ## Usage
