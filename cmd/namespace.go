@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/mirceanton/kubectl-switch/pkg/kubeconfig"
+	"github.com/mirceanton/kubectl-switch/v2/pkg/kubeconfig"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

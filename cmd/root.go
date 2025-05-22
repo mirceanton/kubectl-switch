@@ -3,7 +3,7 @@ package cmd
 import (
 	"os"
 
-	"github.com/mirceanton/kubectl-switch/pkg/kubeconfig"
+	"pkg/kubeconfig"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
