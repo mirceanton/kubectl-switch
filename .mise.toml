@@ -15,4 +15,4 @@ go = "1.24.2"
 
 # Renovate
 node = "22"
-"npm:renovate" = "40.17.0"
+"npm:renovate" = "40.18.0"
