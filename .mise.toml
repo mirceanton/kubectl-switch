@@ -1,18 +1,25 @@
 [tools]
-# Go tools
+# =================================================================================================
+# Project Tools -> pinned versions
+# =================================================================================================
 go = "1.24.2"
 "aqua:golangci/golangci-lint" = "2.1.6"
 "aqua:goreleaser/goreleaser" = "2.9.0"
+"aqua:kubernetes/kubectl" = "1.33.1"
 
-# Kubernetes tools
-"aqua:kubernetes/kubectl" = "latest"
+
+# =================================================================================================
+# Misc Tools
+# =================================================================================================
 "aqua:kubernetes/minikube" = "latest"
+"aqua:helm/helm" = "latest"
 "aqua:derailed/k9s" = "latest"
 
-# Linters
-"aqua:rhysd/actionlint" = "1.7.7"
-"npm:@commitlint/cli" = "19.8.1"
 
-# Renovate
+# =================================================================================================
+# CI Tools
+# =================================================================================================
 node = "22"
-"npm:renovate" = "40.25.0"
+"npm:renovate" = "40"
+"npm:@commitlint/cli" = "19"
+"aqua:rhysd/actionlint" = "1"
