@@ -31,7 +31,7 @@ jobs:
         with: { fetch-depth: 0 }
 
       - name: Setup mise
-        uses: jdx/mise-action@c0b8518a9f5e56c720e9545c993b77ff15dc7b27 # v3.0.2
+        uses: jdx/mise-action@ca0c5fc9c8a8386dae8ba5d37608a083a307991c # v3.1.0
 
       - name: Run goreleaser (dry-run)
         if: github.event_name != 'release' || inputs.dry-run == 'true'
