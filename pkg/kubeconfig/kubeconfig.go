@@ -119,11 +119,6 @@ func (m *Manager) GetContextsFromDir(configDir string) (map[string]string, []str
 			continue
 		}
 
-		ext := filepath.Ext(file.Name())
-		if ext != ".yaml" && ext != ".yml" {
-			continue
-		}
-
 		path := filepath.Join(configDir, file.Name())
 		kubeconfig, err := clientcmd.LoadFromFile(path)
 		if err != nil {
