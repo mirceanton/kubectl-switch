@@ -3,15 +3,15 @@ package cmd
 import (
 	"os"
 
-	"github.com/mirceanton/kubectl-switch/v2/pkg/kubeconfig"
+	"github.com/mirceanton/kubectl-switch/v2/internal/manager"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 var (
-	configDir string // Global flag for the kubeconfig directory
-	version   string // The version of the tool, set at build time
-	manager   = kubeconfig.NewManager()
+	configDir     string
+	version       string
+	configManager *manager.Manager
 )
 
 var rootCmd = &cobra.Command{
@@ -22,15 +22,18 @@ var rootCmd = &cobra.Command{
 	Short:   "A tool to switch Kubernetes contexts",
 	Long:    `kubectl-switch is a CLI tool to switch Kubernetes contexts from multiple kubeconfig files.`,
 	Version: version,
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		var err error
+		configManager, err = manager.NewManager(configDir)
+		if err != nil {
+			return err
+		}
+		return nil
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		// Check if the "-" argument is provided to switch to the previous config
 		if len(args) == 1 && args[0] == "-" {
-			if err := manager.SwitchToPrevious(); err != nil {
-				if err == kubeconfig.ErrNoPreviousConfig {
-					log.Fatal("No previous configuration found")
-				} else {
-					log.Fatalf("Failed to switch to previous config: %v", err)
-				}
+			if err := configManager.Restore(); err != nil {
+				log.Fatalf("Failed to switch to previous config: %v", err)
 			}
 			return nil
 		}
@@ -39,8 +42,7 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
-	err := rootCmd.Execute()
-	if err != nil {
+	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
 }
