@@ -153,12 +153,12 @@ kubectl switch ctx
 
 ### Configuration Options
 
-| Option               | Flag               | Environment Variable    | Default | Description                                                       |
-| -------------------- | ------------------ | ----------------------- | ------- | ----------------------------------------------------------------- |
-| Kubeconfig Directory | `--kubeconfig-dir` | `KUBECONFIG_DIR`        | None    | Directory containing your kubeconfig files                        |
-| Kubeconfig           | `--kubeconfig`     | `KUBECONFIG`            | None    | Path to the currently active kubeconfig file.                     |
-| Log Level            | `--log-level`      | `KUBECONFIG_LOG_LEVEL`  | `info`  | Logging verbosity (trace, debug, info, warn, error, fatal, panic) |
-| Log Format           | `--log-format`     | `KUBECONFIG_LOG_FORMAT` | `text`  | Log output format (text, json)                                    |
+| Option               | Flag               | Environment Variable | Default            | Description                                                       |
+| -------------------- | ------------------ | -------------------- | ------------------ | ----------------------------------------------------------------- |
+| Kubeconfig Directory | `--kubeconfig-dir` | `KUBECONFIG_DIR`     | `~/.kube/configs/` | Directory containing your kubeconfig files                        |
+| Kubeconfig           | `--kubeconfig`     | `KUBECONFIG`         | `~/.kube/config`   | Path to the currently active kubeconfig file.                     |
+| Log Level            | `--log-level`      | `LOG_LEVEL`          | `info`             | Logging verbosity (trace, debug, info, warn, error, fatal, panic) |
+| Log Format           | `--log-format`     | `LOG_FORMAT`         | `text`             | Log output format (text, json)                                    |
 
 ## Shell Completion
 
