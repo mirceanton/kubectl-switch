@@ -90,7 +90,8 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("failed to expand kubeconfig path: %w", err)
 	}
 	if err := cfg.validateKubeconfig(); err != nil {
-		return nil, err
+		log.Warnf("Kubeconfig file validation failed: %v", err)
+		log.Warn("You can still switch contexts, but namespace operations will not be available")
 	}
 
 	return cfg, nil

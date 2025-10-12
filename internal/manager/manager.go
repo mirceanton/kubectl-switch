@@ -37,8 +37,11 @@ func NewManager(kubeconfigPath, kubeconfigDir string) (*Manager, error) {
 	}
 
 	// Load available namespaces from the current cluster
+	// This may fail if no kubeconfig is active, which is OK
 	if err := m.loadNamespaces(); err != nil {
-		return nil, fmt.Errorf("failed to load namespaces: %w", err)
+		log.Warnf("Failed to load namespaces: %v", err)
+		log.Warn("Namespace operations will not be available until a valid context is selected")
+		m.namespaceNames = []string{} // Initialize to empty slice
 	}
 
 	return m, nil
