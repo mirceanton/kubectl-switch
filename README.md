@@ -6,15 +6,9 @@ Just dump all your `kubeconfigs` into a single dir and let `kubectl-switch` mana
 
 ## Features
 
-- **Multiple kubeconfig files**: Manage multiple kubeconfig files with one or more contexts each, all present in a single directory. You don't have to generate a global kubeconfig to hold all of your contexts
-- **Context Switching**: Easily switch between different Kubernetes contexts from multiple config files.
-- **Namespace Switching**: Quickly change the current namespace in the active context.
-- **Previous Config**: Switch back to the previous configuration with `kubectl switch -`.
-- **Non-Interactive Mode**: Specify the desired context or namespace directly as an argument.
-- **Interactive Mode**: Run the program with no arguments to get an interactive list of available namespaces or contexts to choose from.
-- **Persistent Configuration**: Changes persist across different shell sessions.
-- **Shell Completions**: Provides tab completion for available contexts and namespaces.
-- **Non-destructive**: `kubectl-switch` will never edit those. It will only work with copies of them.
+- **Multiple kubeconfig files**: Manage multiple kubeconfig files in a single directory without merging them
+- **Context & namespace switching**: Switch between contexts and namespaces from multiple config files
+- **Interactive & non-interactive modes**: Select from a list or specify directly as an argument (with tab completion support!)
 
 ## Why `kubectl-switch`?
 
@@ -48,29 +42,29 @@ Precompiled binaries are available for various platforms. You can download the l
 1. Download the appropriate binary for your system and extract the archive.
 2. Make the extracted binary executable:
 
-    ```bash
-    chmod +x kubectl-switch
-    ```
+   ```bash
+   chmod +x kubectl-switch
+   ```
 
 3. Move the binary to a directory in your PATH:
 
-    ```bash
-    mv kubectl-switch /usr/local/bin/kubectl-switch
-    ```
+   ```bash
+   mv kubectl-switch /usr/local/bin/kubectl-switch
+   ```
 
 ### Install via Homebrew
 
 1. Add the tap
 
-    ```bash
-    brew tap mirceanton/taps
-    ```
+   ```bash
+   brew tap mirceanton/taps
+   ```
 
 2. Install `kubectl-switch`
 
-    ```bash
-    brew install kubectl-switch
-    ```
+   ```bash
+   brew install kubectl-switch
+   ```
 
 ### Running via Docker
 
@@ -92,22 +86,22 @@ docker run -v ~/.kube:/root/.kube -v /path/to/kubeconfigs:/kubeconfigs \
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/mirceanton/kubectl-switch
-    cd kubectl-switch
-    ```
+   ```bash
+   git clone https://github.com/mirceanton/kubectl-switch
+   cd kubectl-switch
+   ```
 
 2. Build the tool:
 
-    ```bash
-    go build -o kubectl-switch
-    ```
+   ```bash
+   go build -o kubectl-switch
+   ```
 
 3. Move the binary to your PATH:
 
-    ```bash
-    mv kubectl-switch /usr/local/bin/kubectl-switch
-    ```
+   ```bash
+   mv kubectl-switch /usr/local/bin/kubectl-switch
+   ```
 
 ## Usage
 
@@ -155,12 +149,16 @@ kubectl switch ctx
 
 ## Configuration
 
-You can configure `kubectl-switch` using environment variables or CLI flags:
+`kubectl-switch` uses Viper for configuration management, allowing you to configure the tool via command-line flags or environment variables, with flags taking precedence.
 
-|  Environment Variable  |     CLI Flag      |                   Description                    |        Default Value         |
-| :--------------------: | :---------------: | :----------------------------------------------: | :--------------------------: |
-|    `KUBECONFIG_DIR`    | `--kubeconfig-dir` | Directory containing your kubeconfig files.      |            None              |
-|     `KUBECONFIG`       |       N/A         | Path where the active kubeconfig will be stored. | `~/.kube/config`             |
+### Configuration Options
+
+| Option               | Flag               | Environment Variable    | Default | Description                                                       |
+| -------------------- | ------------------ | ----------------------- | ------- | ----------------------------------------------------------------- |
+| Kubeconfig Directory | `--kubeconfig-dir` | `KUBECONFIG_DIR`        | None    | Directory containing your kubeconfig files                        |
+| Kubeconfig           | `--kubeconfig`     | `KUBECONFIG`            | None    | Path to the currently active kubeconfig file.                     |
+| Log Level            | `--log-level`      | `KUBECONFIG_LOG_LEVEL`  | `info`  | Logging verbosity (trace, debug, info, warn, error, fatal, panic) |
+| Log Format           | `--log-format`     | `KUBECONFIG_LOG_FORMAT` | `text`  | Log output format (text, json)                                    |
 
 ## Shell Completion
 

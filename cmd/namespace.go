@@ -13,9 +13,9 @@ var namespaceCmd = &cobra.Command{
 	Args:              cobra.MaximumNArgs(1),
 	ValidArgsFunction: getNamespaceCompletions,
 	Run: func(cmd *cobra.Command, args []string) {
-		namespaceNames, err := configManager.GetNamespacesForCurrentContext()
-		if err != nil {
-			log.Fatalf("Error listing namespaces: %v", err)
+		namespaceNames := configManager.GetAllNamespaces()
+		if len(namespaceNames) == 0 {
+			log.Fatal("No kubernetes namespaces found in the current cluster")
 		}
 
 		var selectedNamespace string
@@ -44,9 +44,5 @@ func init() {
 }
 
 func getNamespaceCompletions(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	namespaceNames, err := configManager.GetNamespacesForCurrentContext()
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveNoFileComp
-	}
-	return namespaceNames, cobra.ShellCompDirectiveNoFileComp
+	return configManager.GetAllNamespaces(), cobra.ShellCompDirectiveNoFileComp
 }
