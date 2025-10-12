@@ -22,3 +22,19 @@ direnv = "latest"
 # =================================================================================================
 "npm:@commitlint/cli" = "20"
 "aqua:rhysd/actionlint" = "1"
+
+
+# =================================================================================================
+# TASKS -> GO
+# =================================================================================================
+[tasks."release"]
+description = "Run goreleaser in snapshot mode."
+run = "goreleaser release --snapshot --clean"
+
+[tasks."lint"]
+description = "Run golangci-lint in fix mode."
+run = "golangci-lint run --fix"
+
+[tasks."test"]
+description = "Run e2e tests."
+run = "bash scripts/test.sh"
