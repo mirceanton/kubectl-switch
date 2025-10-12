@@ -3,13 +3,14 @@ package cmd
 import (
 	"os"
 
+	"github.com/mirceanton/kubectl-switch/v2/internal/config"
 	"github.com/mirceanton/kubectl-switch/v2/internal/manager"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
-	configDir     string
 	version       string
 	configManager *manager.Manager
 )
@@ -23,8 +24,18 @@ var rootCmd = &cobra.Command{
 	Long:    `kubectl-switch is a CLI tool to switch Kubernetes contexts from multiple kubeconfig files.`,
 	Version: version,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		var err error
-		configManager, err = manager.NewManager(configDir)
+		// Load configuration
+		cfg, err := config.Load()
+		if err != nil {
+			return err
+		}
+
+		// Set up logging
+		log.SetLevel(cfg.LogLevel)
+		log.SetFormatter(cfg.LogFormat)
+
+		// Create manager with config
+		configManager, err = manager.NewManager(cfg.Kubeconfig, cfg.KubeconfigDir)
 		if err != nil {
 			return err
 		}
@@ -48,5 +59,31 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&configDir, "kubeconfig-dir", "", "", "Directory containing kubeconfig files")
+	// Initialize Viper
+	cobra.OnInitialize(config.Init)
+
+	// Bind flags to Viper
+	rootCmd.PersistentFlags().String("kubeconfig-dir", "", "Directory containing kubeconfig files (env: KUBECONFIG_DIR)")
+	err := viper.BindPFlag("kubeconfig-dir", rootCmd.PersistentFlags().Lookup("kubeconfig-dir"))
+	if err != nil {
+		log.Fatalf("Failed to bind flag: %v", err)
+	}
+
+	rootCmd.PersistentFlags().String("kubeconfig", "", "Currently active kubeconfig file (env: KUBECONFIG)")
+	err = viper.BindPFlag("kubeconfig", rootCmd.PersistentFlags().Lookup("kubeconfig"))
+	if err != nil {
+		log.Fatalf("Failed to bind flag: %v", err)
+	}
+
+	rootCmd.PersistentFlags().String("log-level", "info", "Log level (trace, debug, info, warn, error, fatal, panic) (env: LOG_LEVEL)")
+	err = viper.BindPFlag("log-level", rootCmd.PersistentFlags().Lookup("log-level"))
+	if err != nil {
+		log.Fatalf("Failed to bind flag: %v", err)
+	}
+
+	rootCmd.PersistentFlags().String("log-format", "text", "Log format (text, json) (env: LOG_FORMAT)")
+	err = viper.BindPFlag("log-format", rootCmd.PersistentFlags().Lookup("log-format"))
+	if err != nil {
+		log.Fatalf("Failed to bind flag: %v", err)
+	}
 }

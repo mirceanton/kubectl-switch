@@ -2,27 +2,10 @@
 set -e
 
 # Create config directory if it doesn't exist
-export KUBECONFIG_DIR="./configs/"
+export KUBECONFIG="./test/config"
+export KUBECONFIG_DIR="./test/configs/"
 mkdir -p $KUBECONFIG_DIR
 
-cleanup() {
-    echo "Performing cleanup..."
-
-    # Stop and delete minikube clusters
-    echo "Stopping and deleting test-cluster-1..."
-    KUBECONFIG=./configs/cluster1.yaml minikube stop -p test-cluster-1 || true
-    KUBECONFIG=./configs/cluster1.yaml minikube delete -p test-cluster-1 || true
-
-    echo "Stopping and deleting test-cluster-2..."
-    KUBECONFIG=./configs/cluster2.yaml minikube stop -p test-cluster-2 || true
-    KUBECONFIG=./configs/cluster2.yaml minikube delete -p test-cluster-2 || true
-
-    # Remove config directory
-    echo "Removing configs directory..."
-    rm -rf ./configs/
-
-    echo "Cleanup completed."
-}
 
 setup() {
     echo "Performing setup..."
@@ -33,12 +16,33 @@ setup() {
 
     # Set up Kubernetes clusters
     echo "Setting up test clusters..."
-    KUBECONFIG=./configs/cluster1.yaml minikube start -p test-cluster-1 &
-    KUBECONFIG=./configs/cluster2.yaml minikube start -p test-cluster-2 &
+    KUBECONFIG=$KUBECONFIG_DIR/cluster1.yaml minikube start -p test-cluster-1 &
+    KUBECONFIG=$KUBECONFIG_DIR/cluster2.yaml minikube start -p test-cluster-2 &
     wait
 
     echo "Setup completed."
 }
+
+cleanup() {
+    echo "Performing cleanup..."
+
+    # Stop and delete minikube clusters
+    echo "Stopping and deleting test-cluster-1..."
+    KUBECONFIG=$KUBECONFIG_DIR/cluster1.yaml minikube stop -p test-cluster-1 || true
+    KUBECONFIG=$KUBECONFIG_DIR/cluster1.yaml minikube delete -p test-cluster-1 || true
+
+    echo "Stopping and deleting test-cluster-2..."
+    KUBECONFIG=$KUBECONFIG_DIR/cluster2.yaml minikube stop -p test-cluster-2 || true
+    KUBECONFIG=$KUBECONFIG_DIR/cluster2.yaml minikube delete -p test-cluster-2 || true
+
+    # Remove config directory
+    echo "Removing test directory..."
+    rm -rf tests/
+    rm kubectl-switch
+
+    echo "Cleanup completed."
+}
+
 
 run_tests() {
     echo "Running tests..."
