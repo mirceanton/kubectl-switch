@@ -17,6 +17,7 @@ type Config struct {
 	Kubeconfig    string
 	LogLevel      log.Level
 	LogFormat     log.Formatter
+	PageSize      int
 }
 
 const (
@@ -25,10 +26,12 @@ const (
 	keyKubeconfig    = "kubeconfig"
 	keyLogLevel      = "log-level"
 	keyLogFormat     = "log-format"
+	keyPageSize      = "page-size"
 
 	// Default values
 	defaultLogLevel  = "info"
 	defaultLogFormat = "text"
+	defaultPageSize  = 10
 )
 
 var (
@@ -50,6 +53,7 @@ func Init() {
 	viper.SetDefault(keyKubeconfig, defaultKubeconfig)
 	viper.SetDefault(keyLogLevel, defaultLogLevel)
 	viper.SetDefault(keyLogFormat, defaultLogFormat)
+	viper.SetDefault(keyPageSize, defaultPageSize)
 }
 
 // Load returns the current configuration
@@ -93,6 +97,9 @@ func Load() (*Config, error) {
 		log.Warnf("Kubeconfig file validation failed: %v", err)
 		log.Warn("You can still switch contexts, but namespace operations will not be available")
 	}
+
+	// Get page size
+	cfg.PageSize = viper.GetInt(keyPageSize)
 
 	return cfg, nil
 }

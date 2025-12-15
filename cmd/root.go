@@ -13,6 +13,7 @@ import (
 var (
 	version       string
 	configManager *manager.Manager
+	appConfig     *config.Config
 )
 
 var rootCmd = &cobra.Command{
@@ -25,17 +26,18 @@ var rootCmd = &cobra.Command{
 	Version: version,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// Load configuration
-		cfg, err := config.Load()
+		var err error
+		appConfig, err = config.Load()
 		if err != nil {
 			return err
 		}
 
 		// Set up logging
-		log.SetLevel(cfg.LogLevel)
-		log.SetFormatter(cfg.LogFormat)
+		log.SetLevel(appConfig.LogLevel)
+		log.SetFormatter(appConfig.LogFormat)
 
 		// Create manager with config
-		configManager, err = manager.NewManager(cfg.Kubeconfig, cfg.KubeconfigDir)
+		configManager, err = manager.NewManager(appConfig.Kubeconfig, appConfig.KubeconfigDir)
 		if err != nil {
 			return err
 		}
@@ -83,6 +85,12 @@ func init() {
 
 	rootCmd.PersistentFlags().String("log-format", "text", "Log format (text, json) (env: LOG_FORMAT)")
 	err = viper.BindPFlag("log-format", rootCmd.PersistentFlags().Lookup("log-format"))
+	if err != nil {
+		log.Fatalf("Failed to bind flag: %v", err)
+	}
+
+	rootCmd.PersistentFlags().Int("page-size", 10, "Number of items to show per page in selection prompts (env: PAGE_SIZE)")
+	err = viper.BindPFlag("page-size", rootCmd.PersistentFlags().Lookup("page-size"))
 	if err != nil {
 		log.Fatalf("Failed to bind flag: %v", err)
 	}
