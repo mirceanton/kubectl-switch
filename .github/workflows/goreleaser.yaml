@@ -5,14 +5,8 @@ permissions: { contents: read }
 
 on:
   release: { types: [published] } # wet run
-  push: # dry run
-    paths:
-      - .github/workflows/goreleaser.yaml
-      - .goreleaser.yaml
-      - ".mise.toml"
-      - "**.go"
-      - "go.mod"
-      - "go.sum"
+  pull_request: { branches: ["main"] }
+  push: { branches: ["main", "renovate/**"] }
   workflow_dispatch:
     inputs:
       dry-run:

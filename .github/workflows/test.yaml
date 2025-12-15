@@ -5,12 +5,8 @@ permissions: { contents: read }
 
 on:
   workflow_dispatch: {}
-  push:
-    paths:
-      - ".github/workflows/test.yaml"
-      - "**.go"
-      - "go.mod"
-      - "go.sum"
+  pull_request: { branches: ["main"] }
+  push: { branches: ["main", "renovate/**"] }
 
 jobs:
   test:
