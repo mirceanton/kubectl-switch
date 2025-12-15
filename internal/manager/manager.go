@@ -57,6 +57,27 @@ func (m *Manager) GetAllNamespaces() []string {
 	return m.namespaceNames
 }
 
+// GetCurrentContext returns the current context name from the kubeconfig.
+func (m *Manager) GetCurrentContext() string {
+	kubeconfig, err := clientcmd.LoadFromFile(m.kubeconfigPath)
+	if err != nil {
+		return ""
+	}
+	return kubeconfig.CurrentContext
+}
+
+// GetCurrentNamespace returns the namespace for the current context.
+func (m *Manager) GetCurrentNamespace() string {
+	kubeconfig, err := clientcmd.LoadFromFile(m.kubeconfigPath)
+	if err != nil {
+		return ""
+	}
+	if ctx, exists := kubeconfig.Contexts[kubeconfig.CurrentContext]; exists {
+		return ctx.Namespace
+	}
+	return ""
+}
+
 // SwitchToContext switches to the specified Kubernetes context.
 func (m *Manager) SwitchToContext(contextName string) error {
 	// Find the kubeconfig file containing the desired context

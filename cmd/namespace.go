@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/AlecAivazis/survey/v2"
+	"github.com/mirceanton/kubectl-switch/v2/internal/ui"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -22,14 +22,12 @@ var namespaceCmd = &cobra.Command{
 		if len(args) == 1 {
 			selectedNamespace = args[0]
 		} else {
-			prompt := &survey.Select{
-				Message:  "Choose a namespace:",
-				Options:  namespaceNames,
-				PageSize: appConfig.PageSize,
-			}
-			if err := survey.AskOne(prompt, &selectedNamespace); err != nil {
+			currentNamespace := configManager.GetCurrentNamespace()
+			selected, err := ui.Select("Choose a namespace:", namespaceNames, currentNamespace, appConfig.PageSize)
+			if err != nil {
 				log.Fatalf("Failed to get user input: %v", err)
 			}
+			selectedNamespace = selected
 		}
 
 		if err := configManager.SwitchToNamespace(selectedNamespace); err != nil {
