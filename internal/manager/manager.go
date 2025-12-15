@@ -23,25 +23,14 @@ type Manager struct {
 }
 
 // NewManager creates a new kubeconfig Manager instance.
-// It takes the validated configuration paths and loads available contexts.
 func NewManager(kubeconfigPath, kubeconfigDir string) (*Manager, error) {
 	m := &Manager{
 		kubeconfigPath: kubeconfigPath,
 		kubeconfigDir:  kubeconfigDir,
 		backupPath:     kubeconfigPath + ".previous",
-	}
-
-	// Load available contexts from the config directory
-	if err := m.loadContexts(); err != nil {
-		return nil, fmt.Errorf("failed to load contexts: %w", err)
-	}
-
-	// Load available namespaces from the current cluster
-	// This may fail if no kubeconfig is active, which is OK
-	if err := m.loadNamespaces(); err != nil {
-		log.Warnf("Failed to load namespaces: %v", err)
-		log.Warn("Namespace operations will not be available until a valid context is selected")
-		m.namespaceNames = []string{} // Initialize to empty slice
+		contextMap:     make(map[string]string),
+		contextNames:   []string{},
+		namespaceNames: []string{},
 	}
 
 	return m, nil
@@ -175,8 +164,8 @@ func (m *Manager) backup() error {
 	return nil
 }
 
-// loadContexts scans the config directory for kubeconfig files and loads all available contexts.
-func (m *Manager) loadContexts() error {
+// LoadContexts scans the config directory for kubeconfig files and loads all available contexts.
+func (m *Manager) LoadContexts() error {
 	m.contextMap = make(map[string]string)
 	m.contextNames = nil
 
@@ -211,8 +200,8 @@ func (m *Manager) loadContexts() error {
 	return nil
 }
 
-// loadNamespaces loads all namespaces from the current Kubernetes cluster.
-func (m *Manager) loadNamespaces() error {
+// LoadNamespaces loads all namespaces from the current Kubernetes cluster.
+func (m *Manager) LoadNamespaces() error {
 	config, err := clientcmd.BuildConfigFromFlags("", m.kubeconfigPath)
 	if err != nil {
 		return fmt.Errorf("failed to build config: %w", err)

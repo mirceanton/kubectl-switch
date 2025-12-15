@@ -13,6 +13,10 @@ var contextCmd = &cobra.Command{
 	ValidArgsFunction: getContextCompletions,
 	Args:              cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		if err := configManager.LoadContexts(); err != nil {
+			log.Fatalf("Failed to load contexts: %v", err)
+		}
+
 		contextNames := configManager.GetAllContexts()
 		if len(contextNames) == 0 {
 			log.Fatal("No kubernetes contexts found in the provided directory")
@@ -43,5 +47,8 @@ func init() {
 }
 
 func getContextCompletions(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if err := configManager.LoadContexts(); err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
 	return configManager.GetAllContexts(), cobra.ShellCompDirectiveNoFileComp
 }
