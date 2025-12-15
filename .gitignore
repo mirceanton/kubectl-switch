@@ -2,3 +2,4 @@ kubectl-switch
 dist/
 test/
 .DS_Store
+.vscode/settings.json

@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/AlecAivazis/survey/v2"
+	"github.com/mirceanton/kubectl-switch/v2/internal/ui"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -22,14 +22,12 @@ var contextCmd = &cobra.Command{
 		if len(args) == 1 {
 			selectedContext = args[0]
 		} else {
-			prompt := &survey.Select{
-				Message:  "Choose a context:",
-				Options:  contextNames,
-				PageSize: appConfig.PageSize,
-			}
-			if err := survey.AskOne(prompt, &selectedContext); err != nil {
+			currentContext := configManager.GetCurrentContext()
+			selected, err := ui.Select("Choose a context:", contextNames, currentContext, appConfig.PageSize)
+			if err != nil {
 				log.Fatalf("Failed to get user input: %v", err)
 			}
+			selectedContext = selected
 		}
 
 		if err := configManager.SwitchToContext(selectedContext); err != nil {
