@@ -156,9 +156,10 @@ kubectl switch ctx
 | Option               | Flag               | Environment Variable | Default            | Description                                                       |
 | -------------------- | ------------------ | -------------------- | ------------------ | ----------------------------------------------------------------- |
 | Kubeconfig Directory | `--kubeconfig-dir` | `KUBECONFIG_DIR`     | `~/.kube/configs/` | Directory containing your kubeconfig files                        |
-| Kubeconfig           | `--kubeconfig`     | `KUBECONFIG`         | `~/.kube/config`   | Path to the currently active kubeconfig file.                     |
+| Kubeconfig           | `--kubeconfig`     | `KUBECONFIG`         | `~/.kube/config`   | Path to the currently active kubeconfig file                      |
 | Log Level            | `--log-level`      | `LOG_LEVEL`          | `info`             | Logging verbosity (trace, debug, info, warn, error, fatal, panic) |
 | Log Format           | `--log-format`     | `LOG_FORMAT`         | `text`             | Log output format (text, json)                                    |
+| Page Size            | `--page-size`      | `PAGE_SIZE`          | `10`               | Number of items to show per page in selection prompts             |
 
 ## Shell Completion
 
