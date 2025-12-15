@@ -23,8 +23,9 @@ var namespaceCmd = &cobra.Command{
 			selectedNamespace = args[0]
 		} else {
 			prompt := &survey.Select{
-				Message: "Choose a namespace:",
-				Options: namespaceNames,
+				Message:  "Choose a namespace:",
+				Options:  namespaceNames,
+				PageSize: appConfig.PageSize,
 			}
 			if err := survey.AskOne(prompt, &selectedNamespace); err != nil {
 				log.Fatalf("Failed to get user input: %v", err)

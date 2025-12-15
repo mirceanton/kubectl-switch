@@ -23,8 +23,9 @@ var contextCmd = &cobra.Command{
 			selectedContext = args[0]
 		} else {
 			prompt := &survey.Select{
-				Message: "Choose a context:",
-				Options: contextNames,
+				Message:  "Choose a context:",
+				Options:  contextNames,
+				PageSize: appConfig.PageSize,
 			}
 			if err := survey.AskOne(prompt, &selectedContext); err != nil {
 				log.Fatalf("Failed to get user input: %v", err)
