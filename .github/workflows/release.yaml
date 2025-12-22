@@ -41,8 +41,9 @@ jobs:
         uses: mirceanton/action-semver-release@32926bdfac015a028847dc4b295ab877a808e853 # v2.2.1
         with:
           github-token: ${{ steps.app-token.outputs.token }}
+          draft: true
           dry-run: |
-            ${{ 
+            ${{
               ( github.event.inputs.dry-run == 'true' && github.event_name == 'workflow_dispatch' ) ||
               github.event_name == 'push'
             }}

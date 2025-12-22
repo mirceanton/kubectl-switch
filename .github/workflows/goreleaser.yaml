@@ -4,7 +4,7 @@ name: Goreleaser
 permissions: { contents: read }
 
 on:
-  release: { types: [published] } # wet run
+  release: { types: [created] }
   pull_request: { branches: ["main"] }
   push: { branches: ["main", "renovate/**"] }
   workflow_dispatch:
