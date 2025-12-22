@@ -40,12 +40,12 @@ jobs:
         run: |
           CURRENT=$(mise exec -- svu current)
           NEXT=$(mise exec -- svu next)
-          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
-          echo "next=$NEXT" >> "$GITHUB_OUTPUT"
+          echo "current=$CURRENT" | tee -a "$GITHUB_OUTPUT"
+          echo "next=$NEXT" | tee -a "$GITHUB_OUTPUT"
           if [ "$CURRENT" != "$NEXT" ]; then
-            echo "should_tag=true" >> "$GITHUB_OUTPUT"
+            echo "should_tag=true" | tee -a "$GITHUB_OUTPUT"
           else
-            echo "should_tag=false" >> "$GITHUB_OUTPUT"
+            echo "should_tag=false" | tee -a "$GITHUB_OUTPUT"
           fi
 
       - name: Create and push tag
@@ -55,13 +55,3 @@ jobs:
           git config user.email "${{ steps.app-token.outputs.installation-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com"
           git tag -a "${{ steps.tags.outputs.next }}" -m "Release ${{ steps.tags.outputs.next }}"
           git push origin "${{ steps.tags.outputs.next }}"
-
-      - name: Summary
-        run: |
-          echo "## Tag Summary" >> "$GITHUB_SUMMARY"
-          echo "" >> "$GITHUB_SUMMARY"
-          echo "| Key | Value |" >> "$GITHUB_SUMMARY"
-          echo "|-----|-------|" >> "$GITHUB_SUMMARY"
-          echo "| Current Tag | \`${{ steps.tags.outputs.current }}\` |" >> "$GITHUB_SUMMARY"
-          echo "| Next Tag | \`${{ steps.tags.outputs.next }}\` |" >> "$GITHUB_SUMMARY"
-          echo "| Should Tag | \`${{ steps.tags.outputs.should_tag }}\` |" >> "$GITHUB_SUMMARY"
