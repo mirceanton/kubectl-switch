@@ -1,6 +1,6 @@
 module github.com/mirceanton/kubectl-switch/v2
 
-go 1.25.0
+go 1.26.0
 
 // v2 versions without /v2 in module path
 retract [v2.0.0, v2.2.5]
