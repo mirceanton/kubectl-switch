@@ -49,7 +49,7 @@ jobs:
           fi
 
       - name: Create and push tag
-        if: steps.tags.outputs.should_tag == 'true'
+        if: steps.tags.outputs.should_tag == 'true' && github.event_name == 'schedule'
         run: |
           git config user.name "${{ steps.app-token.outputs.app-slug }}[bot]"
           git config user.email "${{ steps.app-token.outputs.installation-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com"
