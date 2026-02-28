@@ -1,4 +1,11 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [ "github>mirceanton/renovate-config//default.json5" ]
+    "extends": [ "github>mirceanton/renovate-config//default.json5" ],
+    "packageRules": [
+        {
+            "matchDepNames": [ "go" ],
+            "matchDatasources": [ "golang-version", "go" ],
+            "groupName": "go"
+        }
+    ]
 }
