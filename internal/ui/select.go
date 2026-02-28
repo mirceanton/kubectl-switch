@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/charmbracelet/bubbles/key"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
+	"charm.land/bubbles/v2/key"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 )
 
 // SelectModel represents a selection list component
@@ -271,9 +271,9 @@ func (m *SelectModel) adjustOffset() {
 }
 
 // View implements tea.Model
-func (m SelectModel) View() string {
+func (m SelectModel) View() tea.View {
 	if m.quitting {
-		return ""
+		return tea.NewView("")
 	}
 
 	var b strings.Builder
@@ -306,7 +306,7 @@ func (m SelectModel) View() string {
 	if len(m.filteredOptions) == 0 {
 		b.WriteString(normalStyle.Render("  No matches found"))
 		b.WriteString("\n")
-		return b.String()
+		return tea.NewView(b.String())
 	}
 
 	// Calculate visible range
@@ -337,7 +337,7 @@ func (m SelectModel) View() string {
 		b.WriteString("\n")
 	}
 
-	return b.String()
+	return tea.NewView(b.String())
 }
 
 // Selected returns the selected option
