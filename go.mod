@@ -7,7 +7,7 @@ retract [v2.0.0, v2.2.5]
 
 require (
 	charm.land/bubbles/v2 v2.1.1
-	charm.land/bubbletea/v2 v2.0.8
+	charm.land/bubbletea/v2 v2.0.9
 	charm.land/lipgloss/v2 v2.0.6
 	github.com/sirupsen/logrus v1.10.1
 	github.com/spf13/cobra v1.10.2
