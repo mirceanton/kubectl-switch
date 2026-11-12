@@ -1,6 +1,6 @@
 module github.com/mirceanton/kubectl-switch/v2
 
-go 1.26.0
+go 1.26.7
 
 // v2 versions without /v2 in module path
 retract [v2.0.0, v2.2.5]
@@ -8,7 +8,7 @@ retract [v2.0.0, v2.2.5]
 require (
 	charm.land/bubbles/v2 v2.2.1
 	charm.land/bubbletea/v2 v2.1.1
-	charm.land/lipgloss/v2 v2.0.6
+	charm.land/lipgloss/v2 v2.1.0
 	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
